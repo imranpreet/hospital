@@ -1,0 +1,7 @@
+Connected to MongoDB
+Server listening on port 5000
+[notifier] To: 1234567890 | Subject: Appointment Confirmation | Text: Your appointment is booked on 2025-11-02 at 17:34
+[notifier] To: 1234567890 | Subject: Appointment Confirmation | Text: Your appointment is booked on 2025-11-05 at 14:00
+[notifier] To: 1234567890 | Subject: Appointment Confirmation | Text: Your appointment is booked on 2025-11-02 at 12:00
+[notifier] To: 1234567890 | Subject: Appointment Confirmation | Text: Your appointment is booked on 2025-11-02 at 22:00
+[notifier] To: 123456789 | Subject: Appointment Confirmation | Text: Your appointment is booked on 2025-11-02 at 17:30

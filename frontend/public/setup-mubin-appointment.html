@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Mubin's Appointment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f0f9ff;
+        }
+        .button {
+            background: #3b82f6;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .button:hover {
+            background: #2563eb;
+        }
+        .success {
+            background: #10b981;
+        }
+        .danger {
+            background: #ef4444;
+        }
+        .info {
+            background: #e0f2fe;
+            border: 2px solid #0284c7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏥 Setup Test Appointment</h1>
+    
+    <div class="info">
+        <h3>Test Scenario:</h3>
+        <p><strong>Patient:</strong> Mubin</p>
+        <p><strong>Doctor:</strong> Dr. Asha Rao (Cardiologist)</p>
+        <p><strong>Date:</strong> October 31, 2025 (Today)</p>
+        <p><strong>Time:</strong> 03:00 PM</p>
+    </div>
+
+    <button class="button success" onclick="createMubinAppointment()">
+        ✅ Create Mubin's Appointment
+    </button>
+
+    <button class="button" onclick="viewAppointments()">
+        👁️ View All Appointments
+    </button>
+
+    <button class="button danger" onclick="clearAppointments()">
+        🗑️ Clear All Appointments
+    </button>
+
+    <button class="button" onclick="goToDoctors()">
+        🏥 Go to Doctors Page
+    </button>
+
+    <div id="output"></div>
+
+    <script>
+        function createMubinAppointment() {
+            const appointment = {
+                '1': [ // Dr. Asha Rao (Cardiologist)
+                    {
+                        id: Date.now(),
+                        patientName: 'Mubin',
+                        age: 30,
+                        problem: 'Heart checkup and consultation',
+                        appointmentDate: '2025-10-31',
+                        appointmentTime: '03:00 PM',
+                        status: 'pending'
+                    }
+                ]
+            };
+
+            localStorage.setItem('doctorAppointments', JSON.stringify(appointment));
+            
+            document.getElementById('output').innerHTML = `
+                <div class="info" style="background: #d1fae5; border-color: #10b981;">
+                    <h3>✅ Mubin's Appointment Created!</h3>
+                    <p>Now try to book Dr. Asha Rao on October 31, 2025 at 3:00 PM</p>
+                    <p>You should see: "Doctor is BUSY" message</p>
+                    <pre>${JSON.stringify(appointment, null, 2)}</pre>
+                </div>
+            `;
+        }
+
+        function viewAppointments() {
+            const appointments = JSON.parse(localStorage.getItem('doctorAppointments') || '{}');
+            document.getElementById('output').innerHTML = `
+                <div class="info">
+                    <h3>📋 Current Appointments:</h3>
+                    <pre>${JSON.stringify(appointments, null, 2)}</pre>
+                </div>
+            `;
+        }
+
+        function clearAppointments() {
+            localStorage.removeItem('doctorAppointments');
+            localStorage.removeItem('appointments');
+            document.getElementById('output').innerHTML = `
+                <div class="info" style="background: #fee2e2; border-color: #ef4444;">
+                    <h3>🗑️ All Appointments Cleared!</h3>
+                </div>
+            `;
+        }
+
+        function goToDoctors() {
+            window.location.href = '/doctors';
+        }
+
+        // Auto-create Mubin's appointment on page load
+        window.onload = function() {
+            createMubinAppointment();
+        };
+    </script>
+</body>
+</html>
