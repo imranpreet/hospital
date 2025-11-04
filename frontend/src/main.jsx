@@ -22,6 +22,7 @@ import TestAvailability from './pages/TestAvailability'
 import WardManagement from './pages/WardManagement'
 import AdmitPatient from './pages/AdmitPatient'
 import DischargePatient from './pages/DischargePatient'
+import DepartmentDetail from './pages/DepartmentDetail'
 
 function App(){
   return (
@@ -43,6 +44,7 @@ function App(){
             <Routes>
               <Route path='/' element={<Home/>} />
               <Route path='/about' element={<About/>} />
+              <Route path='/department/:departmentName' element={<DepartmentDetail/>} />
               <Route path='/doctors' element={<Doctors/>} />
               <Route path='/check-availability' element={<CheckAvailability/>} />
               <Route path='/test-availability' element={<TestAvailability/>} />

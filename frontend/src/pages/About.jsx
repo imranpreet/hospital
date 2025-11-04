@@ -373,7 +373,7 @@ export default function About(){
                   <span className='text-sm text-slate-500'>+ 15 others</span>
                 </div>
                 <button 
-                  onClick={() => navigate('/doctors')}
+                  onClick={() => navigate('/department/general-medicine')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
                   See Detail
@@ -412,7 +412,7 @@ export default function About(){
                   <span className='text-sm text-slate-500'>+ 10 others</span>
                 </div>
                 <button 
-                  onClick={() => navigate('/doctors')}
+                  onClick={() => navigate('/department/cardiology')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
                   See Detail
@@ -450,7 +450,7 @@ export default function About(){
                   <span className='text-sm text-slate-500'>+ 12 others</span>
                 </div>
                 <button 
-                  onClick={() => navigate('/doctors')}
+                  onClick={() => navigate('/department/internal-medicine')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
                   See Detail
@@ -490,7 +490,7 @@ export default function About(){
                   <span className='text-sm text-slate-500'>+ 9 others</span>
                 </div>
                 <button 
-                  onClick={() => navigate('/doctors')}
+                  onClick={() => navigate('/department/orthopedics')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
                   See Details
