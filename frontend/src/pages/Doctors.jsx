@@ -13,6 +13,7 @@ export default function Doctors(){
   const [showBookingForm, setShowBookingForm] = useState(false)
   const [showPatientList, setShowPatientList] = useState(false)
   const [patientsList, setPatientsList] = useState([])
+  const [expandedEducation, setExpandedEducation] = useState({})
   const [bookingData, setBookingData] = useState({
     patientName: '',
     problem: '',
@@ -23,6 +24,13 @@ export default function Doctors(){
   const [availabilityResult, setAvailabilityResult] = useState(null)
   const [checkingAvailability, setCheckingAvailability] = useState(false)
   const navigate = useNavigate()
+  
+  const toggleEducation = (doctorId) => {
+    setExpandedEducation(prev => ({
+      ...prev,
+      [doctorId]: !prev[doctorId]
+    }))
+  }
 
   // Sample expert doctors with complete information
   const sampleDoctors = [
@@ -33,6 +41,13 @@ export default function Doctors(){
       department: 'Cardiology',
       experience: '15 years',
       education: 'MD, DM Cardiology - Harvard Medical School',
+      educationDetails: {
+        degree: 'Doctor of Medicine (MD), Doctor of Medicine in Cardiology (DM)',
+        university: 'Harvard Medical School',
+        year: '2010',
+        additional: 'Fellowship in Interventional Cardiology, Johns Hopkins Hospital (2012)',
+        certifications: ['Board Certified in Cardiology', 'FACC (Fellow of American College of Cardiology)', 'Advanced Cardiac Life Support (ACLS)']
+      },
       image: 'https://i.pinimg.com/736x/db/0e/3c/db0e3cecc65f6edeb2314f47c23d6027.jpg',
       certificate: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=500&q=80',
       bio: 'Dr. Asha Rao is a board-certified cardiologist with over 15 years of experience. She specializes in interventional cardiology and has performed over 3,000 successful cardiac procedures. She completed her residency at Johns Hopkins and fellowship at Harvard Medical School.',
@@ -57,6 +72,13 @@ export default function Doctors(){
       department: 'Neurology',
       experience: '12 years',
       education: 'MD, Neurology - Stanford University',
+      educationDetails: {
+        degree: 'Doctor of Medicine (MD) in Neurology',
+        university: 'Stanford University School of Medicine',
+        year: '2013',
+        additional: 'Residency in Neurology, Mayo Clinic (2016)',
+        certifications: ['Board Certified in Neurology', 'Epilepsy Specialist Certification', 'Stroke Intervention Certification']
+      },
       image: 'https://i.pinimg.com/736x/db/0e/3c/db0e3cecc65f6edeb2314f47c23d6027.jpg',
       certificate: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=500&q=80',
       bio: 'Dr. Priya Sharma specializes in treating neurological disorders including epilepsy, stroke, and movement disorders. She has published over 50 research papers and is a pioneer in advanced brain imaging techniques. She believes in patient-centered care and evidence-based medicine.',
@@ -81,6 +103,13 @@ export default function Doctors(){
       department: 'Pediatrics',
       experience: '10 years',
       education: 'MD, Pediatrics - Yale School of Medicine',
+      educationDetails: {
+        degree: 'Doctor of Medicine (MD) in Pediatrics',
+        university: 'Yale School of Medicine',
+        year: '2015',
+        additional: 'Fellowship in Pediatric Emergency Medicine, Boston Children\'s Hospital (2018)',
+        certifications: ['Board Certified in Pediatrics', 'Pediatric Advanced Life Support (PALS)', 'Child Development Specialist']
+      },
       image: 'https://i.pinimg.com/736x/db/0e/3c/db0e3cecc65f6edeb2314f47c23d6027.jpg',
       certificate: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=500&q=80',
       bio: 'Dr. Vikram Singh is passionate about child healthcare and preventive medicine. He has extensive experience in treating childhood diseases, developmental disorders, and behavioral issues. He creates a comfortable and friendly environment for young patients and their families.',
@@ -745,16 +774,65 @@ export default function Doctors(){
                   {/* Doctor Info */}
                   <div className='p-6 space-y-4'>
                     {/* Education & Certificate */}
-                    <div className='bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-4 border border-blue-100'>
+                    <div 
+                      className='bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-4 border border-blue-100 cursor-pointer hover:shadow-md transition-all duration-300'
+                      onClick={() => toggleEducation(doctor._id)}
+                    >
                       <div className='flex items-start gap-3 mb-3'>
                         <GraduationCap className='w-6 h-6 text-blue-600 flex-shrink-0 mt-1' />
-                        <div>
-                          <div className='text-xs font-semibold text-blue-600 mb-1'>EDUCATION</div>
+                        <div className='flex-1'>
+                          <div className='text-xs font-semibold text-blue-600 mb-1 flex items-center justify-between'>
+                            <span>EDUCATION</span>
+                            <span className='text-xs text-gray-500'>{expandedEducation[doctor._id] ? '▲ Click to collapse' : '▼ Click to expand'}</span>
+                          </div>
                           <p className='text-sm text-gray-700 font-medium leading-relaxed'>{doctor.education || 'Medical Degree'}</p>
+                          
+                          {/* Expanded Education Details */}
+                          {expandedEducation[doctor._id] && doctor.educationDetails && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className='mt-4 pt-4 border-t border-blue-200 space-y-3'
+                            >
+                              <div>
+                                <p className='text-xs font-semibold text-blue-700 mb-1'>Degree</p>
+                                <p className='text-sm text-gray-700'>{doctor.educationDetails.degree}</p>
+                              </div>
+                              <div>
+                                <p className='text-xs font-semibold text-blue-700 mb-1'>University</p>
+                                <p className='text-sm text-gray-700'>{doctor.educationDetails.university}</p>
+                              </div>
+                              <div>
+                                <p className='text-xs font-semibold text-blue-700 mb-1'>Year of Graduation</p>
+                                <p className='text-sm text-gray-700'>{doctor.educationDetails.year}</p>
+                              </div>
+                              {doctor.educationDetails.additional && (
+                                <div>
+                                  <p className='text-xs font-semibold text-blue-700 mb-1'>Additional Training</p>
+                                  <p className='text-sm text-gray-700'>{doctor.educationDetails.additional}</p>
+                                </div>
+                              )}
+                              {doctor.educationDetails.certifications && doctor.educationDetails.certifications.length > 0 && (
+                                <div>
+                                  <p className='text-xs font-semibold text-blue-700 mb-2'>Certifications</p>
+                                  <ul className='space-y-1'>
+                                    {doctor.educationDetails.certifications.map((cert, idx) => (
+                                      <li key={idx} className='text-sm text-gray-700 flex items-start gap-2'>
+                                        <CheckCircle className='w-4 h-4 text-green-600 mt-0.5 flex-shrink-0' />
+                                        <span>{cert}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </motion.div>
+                          )}
                         </div>
                       </div>
                       {doctor.certificate && (
-                        <div className='flex items-center gap-2 text-xs text-blue-600 font-semibold hover:underline cursor-pointer'>
+                        <div className='flex items-center gap-2 text-xs text-blue-600 font-semibold hover:underline'>
                           <BookOpen className='w-4 h-4' />
                           <span>View Certificate</span>
                         </div>
