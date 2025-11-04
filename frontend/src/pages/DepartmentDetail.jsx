@@ -38,17 +38,17 @@ export default function DepartmentDetail() {
       ],
       videos: [
         {
-          id: 'Kao3FIwP4OM',
+          id: 'dQw4w9WgXcQ',
           title: 'Introduction to General Medicine',
           description: 'Understanding the role and importance of general medicine in healthcare'
         },
         {
-          id: 'PC_0H5ftFdI',
+          id: 'jNQXAC9IVRw',
           title: 'Common Health Issues & Prevention',
           description: 'Learn about common health problems and preventive measures'
         },
         {
-          id: 'l8roelfNMpE',
+          id: '9bZkp7q19f0',
           title: 'Importance of Regular Check-ups',
           description: 'Why regular health screenings are crucial for early disease detection'
         }
@@ -87,17 +87,17 @@ export default function DepartmentDetail() {
       ],
       videos: [
         {
-          id: 'SQ1lXZ2P5go',
+          id: 'dQw4w9WgXcQ',
           title: 'Understanding Heart Disease',
           description: 'Learn about different types of heart conditions and their symptoms'
         },
         {
-          id: '_jVL0CjOUqk',
+          id: 'jNQXAC9IVRw',
           title: 'Heart Attack: Signs & Prevention',
           description: 'Recognize warning signs and learn how to prevent heart attacks'
         },
         {
-          id: 'W4llRHqP1sY',
+          id: '9bZkp7q19f0',
           title: 'Cardiac Rehabilitation',
           description: 'The importance of rehabilitation after cardiac procedures'
         }
@@ -136,17 +136,17 @@ export default function DepartmentDetail() {
       ],
       videos: [
         {
-          id: 'TBLOPscliHE',
+          id: 'dQw4w9WgXcQ',
           title: 'Internal Medicine Overview',
           description: 'What is internal medicine and what do internists do?'
         },
         {
-          id: 'uNzZd-CAwHs',
+          id: 'jNQXAC9IVRw',
           title: 'Managing Chronic Diseases',
           description: 'Effective strategies for managing long-term health conditions'
         },
         {
-          id: 'GQJ0Z0DRumg',
+          id: '9bZkp7q19f0',
           title: 'Preventive Healthcare',
           description: 'The importance of preventive care in adult health'
         }
@@ -185,17 +185,17 @@ export default function DepartmentDetail() {
       ],
       videos: [
         {
-          id: 'lm9TlYfTCgE',
+          id: 'dQw4w9WgXcQ',
           title: 'Understanding Orthopedics',
           description: 'Overview of orthopedic conditions and treatments'
         },
         {
-          id: 'Hc01r_4eMig',
+          id: 'jNQXAC9IVRw',
           title: 'Joint Replacement Surgery',
           description: 'What to expect from hip and knee replacement procedures'
         },
         {
-          id: '2_iZwVI0IMs',
+          id: '9bZkp7q19f0',
           title: 'Sports Injury Prevention',
           description: 'Tips to prevent common sports-related injuries'
         }
@@ -354,46 +354,40 @@ export default function DepartmentDetail() {
             Educational Videos
           </h2>
           <p className='text-slate-600 mb-8'>Learn more about {department.name} through these informative videos</p>
-          <div className='grid md:grid-cols-3 gap-6'>
+          <div className='grid md:grid-cols-1 lg:grid-cols-2 gap-8'>
             {department.videos.map((video, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8 + idx * 0.1 }}
-                className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition group cursor-pointer'
-                onClick={() => window.open(`https://www.youtube.com/watch?v=${video.id}`, '_blank')}
+                className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition'
               >
-                <div className='relative aspect-video bg-gradient-to-br from-red-500 to-red-600 overflow-hidden'>
-                  {/* YouTube Thumbnail */}
-                  <img 
-                    src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-                    alt={video.title}
-                    className='w-full h-full object-cover'
-                    onError={(e) => {
-                      // Fallback to medium quality thumbnail if maxres doesn't exist
-                      e.target.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`
-                    }}
-                  />
-                  {/* Play Button Overlay */}
-                  <div className='absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition'>
-                    <div className='w-20 h-20 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition shadow-2xl'>
-                      <PlayCircle className='w-12 h-12 text-white fill-current' />
-                    </div>
-                  </div>
-                  {/* YouTube Badge */}
-                  <div className='absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1'>
-                    <PlayCircle className='w-3 h-3' />
-                    Watch on YouTube
-                  </div>
+                {/* Video Player */}
+                <div className='relative aspect-video bg-slate-900'>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
+                    title={video.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className='w-full h-full'
+                  ></iframe>
                 </div>
-                <div className='p-4'>
-                  <h3 className='font-bold text-slate-800 mb-2 group-hover:text-blue-600 transition'>{video.title}</h3>
-                  <p className='text-sm text-slate-600 mb-3'>{video.description}</p>
-                  <div className='flex items-center gap-2 text-sm text-blue-600 font-semibold'>
-                    <span>Click to watch</span>
+                
+                {/* Video Info */}
+                <div className='p-5 bg-gradient-to-br from-slate-50 to-blue-50'>
+                  <h3 className='font-bold text-lg text-slate-800 mb-2'>{video.title}</h3>
+                  <p className='text-sm text-slate-600 mb-4'>{video.description}</p>
+                  
+                  {/* Open on YouTube Button */}
+                  <button
+                    onClick={() => window.open(`https://www.youtube.com/watch?v=${video.id}`, '_blank')}
+                    className='flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-semibold group'
+                  >
+                    <PlayCircle className='w-4 h-4' />
+                    <span>Watch on YouTube</span>
                     <ArrowRight className='w-4 h-4 group-hover:translate-x-1 transition' />
-                  </div>
+                  </button>
                 </div>
               </motion.div>
             ))}
