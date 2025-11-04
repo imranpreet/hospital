@@ -494,6 +494,271 @@ export default function Home(){
         </div>
       </section>
 
+      {/* Statistics Section */}
+      <section className='py-20 bg-gradient-to-br from-blue-50 to-cyan-50'>
+        <div className='max-w-6xl mx-auto px-4'>
+          <div className='text-center mb-16'>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className='text-4xl font-bold text-slate-900 mb-4'
+            >
+              Our Achievements
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className='text-lg text-slate-600'
+            >
+              Numbers that speak for our excellence
+            </motion.p>
+          </div>
+
+          <div className='grid grid-cols-2 md:grid-cols-4 gap-8'>
+            {[
+              { number: '50,000+', label: 'Happy Patients', icon: Users },
+              { number: '100+', label: 'Expert Doctors', icon: Activity },
+              { number: '20+', label: 'Departments', icon: Heart },
+              { number: '24/7', label: 'Emergency Service', icon: Clock }
+            ].map((stat, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className='text-center bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition'
+              >
+                <div className='w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4'>
+                  <stat.icon className='w-8 h-8 text-white' />
+                </div>
+                <h3 className='text-4xl font-bold text-sky-600 mb-2'>{stat.number}</h3>
+                <p className='text-slate-600 font-medium'>{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Departments Showcase */}
+      <section className='py-20 bg-white'>
+        <div className='max-w-6xl mx-auto px-4'>
+          <div className='text-center mb-16'>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className='text-4xl font-bold text-slate-900 mb-4'
+            >
+              Our Medical Departments
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className='text-lg text-slate-600 max-w-2xl mx-auto'
+            >
+              Comprehensive healthcare services across multiple specialties with state-of-the-art facilities
+            </motion.p>
+          </div>
+
+          <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {[
+              { name: 'General Medicine', icon: Activity, color: 'from-blue-500 to-blue-600', desc: 'Comprehensive primary healthcare and chronic disease management' },
+              { name: 'Cardiology', icon: Heart, color: 'from-red-500 to-pink-600', desc: 'Advanced cardiac care and heart disease treatment' },
+              { name: 'Orthopedics', icon: Activity, color: 'from-orange-500 to-red-600', desc: 'Bone, joint, and musculoskeletal system care' },
+              { name: 'Pediatrics', icon: Users, color: 'from-purple-500 to-pink-600', desc: 'Specialized healthcare for infants and children' },
+              { name: 'Gynecology', icon: Heart, color: 'from-pink-500 to-rose-600', desc: 'Women\'s health and reproductive care' },
+              { name: 'Emergency Care', icon: Activity, color: 'from-red-600 to-orange-600', desc: '24/7 emergency medical services' }
+            ].map((dept, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className='bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl border border-slate-200 hover:shadow-xl transition group cursor-pointer'
+              >
+                <div className={`w-14 h-14 bg-gradient-to-br ${dept.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition`}>
+                  <dept.icon className='w-7 h-7 text-white' />
+                </div>
+                <h3 className='text-xl font-bold text-slate-900 mb-2'>{dept.name}</h3>
+                <p className='text-slate-600 text-sm leading-relaxed'>{dept.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className='text-center mt-12'>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/about')}
+              className='px-8 py-3 bg-sky-600 text-white rounded-lg font-semibold hover:bg-sky-700 shadow-md inline-flex items-center gap-2'
+            >
+              View All Departments
+              <ArrowRight className='w-5 h-5' />
+            </motion.button>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section className='py-20 bg-gradient-to-br from-slate-50 to-blue-50'>
+        <div className='max-w-6xl mx-auto px-4'>
+          <div className='text-center mb-16'>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className='text-4xl font-bold text-slate-900 mb-4'
+            >
+              Why Choose Our Hospital?
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className='text-lg text-slate-600 max-w-2xl mx-auto'
+            >
+              We are committed to providing world-class healthcare with compassion and excellence
+            </motion.p>
+          </div>
+
+          <div className='grid md:grid-cols-2 gap-6'>
+            {[
+              {
+                title: 'Experienced Medical Team',
+                desc: 'Our team consists of highly qualified doctors with an average of 15+ years of experience in their respective fields',
+                icon: Users
+              },
+              {
+                title: 'Advanced Technology',
+                desc: 'Equipped with cutting-edge medical equipment and modern diagnostic facilities for accurate diagnosis and treatment',
+                icon: Activity
+              },
+              {
+                title: 'Patient-Centered Care',
+                desc: 'We prioritize patient comfort and satisfaction with personalized treatment plans and compassionate care',
+                icon: Heart
+              },
+              {
+                title: 'Affordable Healthcare',
+                desc: 'Quality healthcare at competitive prices with transparent billing and various insurance options accepted',
+                icon: Shield
+              },
+              {
+                title: '24/7 Emergency Services',
+                desc: 'Round-the-clock emergency care with dedicated trauma center and ambulance services',
+                icon: Clock
+              },
+              {
+                title: 'Comprehensive Services',
+                desc: 'From preventive care to complex surgeries, we offer a complete range of medical services under one roof',
+                icon: CheckCircle
+              }
+            ].map((reason, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: idx % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className='bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition flex gap-4'
+              >
+                <div className='w-12 h-12 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0'>
+                  <reason.icon className='w-6 h-6 text-white' />
+                </div>
+                <div>
+                  <h3 className='text-lg font-bold text-slate-900 mb-2'>{reason.title}</h3>
+                  <p className='text-slate-600 text-sm leading-relaxed'>{reason.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className='py-20 bg-white'>
+        <div className='max-w-6xl mx-auto px-4'>
+          <div className='text-center mb-16'>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className='text-4xl font-bold text-slate-900 mb-4'
+            >
+              What Our Patients Say
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className='text-lg text-slate-600'
+            >
+              Real experiences from real patients
+            </motion.p>
+          </div>
+
+          <div className='grid md:grid-cols-3 gap-8'>
+            {[
+              {
+                name: 'Sarah Johnson',
+                role: 'Patient',
+                rating: 5,
+                text: 'Excellent service! The doctors are very professional and caring. I received the best treatment for my condition. Highly recommended!',
+                image: '👩‍💼'
+              },
+              {
+                name: 'Michael Chen',
+                role: 'Patient',
+                rating: 5,
+                text: 'The online appointment system is so convenient. I was able to book my slot easily and the entire process was smooth and hassle-free.',
+                image: '👨‍💼'
+              },
+              {
+                name: 'Priya Sharma',
+                role: 'Patient',
+                rating: 5,
+                text: 'Amazing hospital with state-of-the-art facilities. The staff is friendly and the doctors take time to explain everything clearly.',
+                image: '👩‍⚕️'
+              }
+            ].map((testimonial, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.15 }}
+                className='bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition'
+              >
+                <div className='flex items-center gap-4 mb-4'>
+                  <div className='w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center text-3xl'>
+                    {testimonial.image}
+                  </div>
+                  <div>
+                    <h4 className='font-bold text-slate-900'>{testimonial.name}</h4>
+                    <p className='text-sm text-slate-600'>{testimonial.role}</p>
+                  </div>
+                </div>
+                <div className='flex gap-1 mb-4'>
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <span key={i} className='text-yellow-500 text-xl'>★</span>
+                  ))}
+                </div>
+                <p className='text-slate-700 italic leading-relaxed'>"{testimonial.text}"</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className='py-16 bg-gradient-to-r from-sky-600 to-blue-600'>
         <div className='max-w-6xl mx-auto px-4 text-center text-white'>
