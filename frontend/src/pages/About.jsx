@@ -420,83 +420,6 @@ export default function About(){
               </div>
             </motion.div>
 
-            {/* Pediatrics */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group'
-            >
-              <div className='relative h-48 overflow-hidden'>
-                <img 
-                  src='https://images.unsplash.com/photo-1551601651-05f5c6a15f8e?w=500&h=300&fit=crop'
-                  alt='Pediatrics'
-                  className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
-                />
-              </div>
-              <div className='p-6'>
-                <h3 className='text-xl font-bold text-slate-800 mb-2'>Pediatrics</h3>
-                <p className='text-slate-600 text-sm mb-4'>
-                  Dedicated to the health and well-being of children, providing specialized care for infants, children, and adolescents.
-                </p>
-                <div className='flex items-center gap-2 mb-4'>
-                  <div className='flex -space-x-2'>
-                    <img src='https://i.pravatar.cc/40?img=21' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                    <img src='https://i.pravatar.cc/40?img=22' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                    <img src='https://i.pravatar.cc/40?img=23' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                    <img src='https://i.pravatar.cc/40?img=24' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                    <img src='https://i.pravatar.cc/40?img=25' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                  </div>
-                  <span className='text-sm text-slate-500'>+ 7 others</span>
-                </div>
-                <button 
-                  onClick={() => navigate('/doctors')}
-                  className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
-                >
-                  See Detail
-                </button>
-              </div>
-            </motion.div>
-
-            {/* Dermatology */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group'
-            >
-              <div className='relative h-48 overflow-hidden'>
-                <img 
-                  src='https://images.unsplash.com/photo-1556228578-dd6f76b2b45c?w=500&h=300&fit=crop'
-                  alt='Dermatology'
-                  className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
-                />
-              </div>
-              <div className='p-6'>
-                <h3 className='text-xl font-bold text-slate-800 mb-2'>Dermatology</h3>
-                <p className='text-slate-600 text-sm mb-4'>
-                  Focuses on the treatment of skin conditions, offering medical and cosmetic dermatology services to improve skin health.
-                </p>
-                <div className='flex items-center gap-2 mb-4'>
-                  <div className='flex -space-x-2'>
-                    <img src='https://i.pravatar.cc/40?img=31' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                    <img src='https://i.pravatar.cc/40?img=32' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                    <img src='https://i.pravatar.cc/40?img=33' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                    <img src='https://i.pravatar.cc/40?img=34' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
-                  </div>
-                  <span className='text-sm text-slate-500'>+ 8 others</span>
-                </div>
-                <button 
-                  onClick={() => navigate('/doctors')}
-                  className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
-                >
-                  See Detail
-                </button>
-              </div>
-            </motion.div>
-
             {/* Internal Medicine */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -561,6 +484,8 @@ export default function About(){
                     <img src='https://i.pravatar.cc/40?img=52' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
                     <img src='https://i.pravatar.cc/40?img=53' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
                     <img src='https://i.pravatar.cc/40?img=54' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
+                    <img src='https://i.pravatar.cc/40?img=51' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
+                    <img src='https://i.pravatar.cc/40?img=53' alt='Doctor' className='w-8 h-8 rounded-full border-2 border-white' />
                   </div>
                   <span className='text-sm text-slate-500'>+ 9 others</span>
                 </div>
@@ -568,7 +493,7 @@ export default function About(){
                   onClick={() => navigate('/doctors')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
-                  See Detail
+                  See Details
                 </button>
               </div>
             </motion.div>
