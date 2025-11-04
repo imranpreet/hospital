@@ -607,14 +607,14 @@ export default function Home(){
       </section>
 
       {/* Why Choose Us */}
-      <section className='py-20 bg-gradient-to-br from-slate-50 to-blue-50'>
+      <section className='relative py-20 overflow-hidden bg-gradient-to-br from-sky-400 via-blue-500 to-cyan-500'>
         <div className='max-w-6xl mx-auto px-4'>
           <div className='text-center mb-16'>
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className='text-4xl font-bold text-slate-900 mb-4'
+              className='text-4xl font-bold text-white mb-4'
             >
               Why Choose Our Hospital?
             </motion.h2>
@@ -623,7 +623,7 @@ export default function Home(){
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className='text-lg text-slate-600 max-w-2xl mx-auto'
+              className='text-lg text-white/90 max-w-2xl mx-auto'
             >
               We are committed to providing world-class healthcare with compassion and excellence
             </motion.p>
@@ -684,8 +684,18 @@ export default function Home(){
       </section>
 
       {/* Testimonials Section */}
-      <section className='py-20 bg-white'>
-        <div className='max-w-6xl mx-auto px-4'>
+      <section className='relative py-20 overflow-hidden'>
+        {/* Background Image with Overlay */}
+        <div className='absolute inset-0 z-0'>
+          <img 
+            src='https://images.unsplash.com/photo-1504813184591-01572f98c85f?w=1920&h=800&fit=crop' 
+            alt='Healthcare Background'
+            className='w-full h-full object-cover'
+          />
+          <div className='absolute inset-0 bg-gradient-to-br from-white/95 via-blue-50/90 to-cyan-50/95'></div>
+        </div>
+
+        <div className='relative z-10 max-w-6xl mx-auto px-4'>
           <div className='text-center mb-16'>
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
