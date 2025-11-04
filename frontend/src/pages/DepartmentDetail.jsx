@@ -38,17 +38,17 @@ export default function DepartmentDetail() {
       ],
       videos: [
         {
-          id: 'GRPph_JrL0I',
+          id: 'n5xXxaJF7tY',
           title: 'Introduction to General Medicine',
           description: 'Understanding the role and importance of general medicine in healthcare'
         },
         {
-          id: 'WzU42ZXXVMU',
+          id: 'TlC7_wBStX4',
           title: 'Common Health Issues & Prevention',
           description: 'Learn about common health problems and preventive measures'
         },
         {
-          id: 'dQw4w9WgXcQ',
+          id: 'aUaInS6HIGo',
           title: 'Importance of Regular Check-ups',
           description: 'Why regular health screenings are crucial for early disease detection'
         }
@@ -87,17 +87,17 @@ export default function DepartmentDetail() {
       ],
       videos: [
         {
-          id: 'CZFfa57BCiY',
+          id: 'oHMmtqKgs50',
           title: 'Understanding Heart Disease',
           description: 'Learn about different types of heart conditions and their symptoms'
         },
         {
-          id: 'p4NACKVzyHs',
+          id: 'nGf-rap8cI8',
           title: 'Heart Attack: Signs & Prevention',
           description: 'Recognize warning signs and learn how to prevent heart attacks'
         },
         {
-          id: '7DJPsCCZpW8',
+          id: 'VXuXJdpf5gQ',
           title: 'Cardiac Rehabilitation',
           description: 'The importance of rehabilitation after cardiac procedures'
         }
@@ -136,17 +136,17 @@ export default function DepartmentDetail() {
       ],
       videos: [
         {
-          id: 'RmkVNLDMXfg',
+          id: 'SEFs4jxQKNQ',
           title: 'Internal Medicine Overview',
           description: 'What is internal medicine and what do internists do?'
         },
         {
-          id: 'YPr1VzaA8es',
+          id: 'BGpzAM5Bjzk',
           title: 'Managing Chronic Diseases',
           description: 'Effective strategies for managing long-term health conditions'
         },
         {
-          id: 'tRXUz2HFvT0',
+          id: 'LdVJPOPkyFE',
           title: 'Preventive Healthcare',
           description: 'The importance of preventive care in adult health'
         }
@@ -185,17 +185,17 @@ export default function DepartmentDetail() {
       ],
       videos: [
         {
-          id: 'fRnGp7fIVu4',
+          id: 'FXZ0CfLHG-0',
           title: 'Understanding Orthopedics',
           description: 'Overview of orthopedic conditions and treatments'
         },
         {
-          id: 'oLZ8v5VyVZs',
+          id: '6fTQ7z8YkYc',
           title: 'Joint Replacement Surgery',
           description: 'What to expect from hip and knee replacement procedures'
         },
         {
-          id: 'mGzWF7E3YwM',
+          id: 'SsDhQLfx5LQ',
           title: 'Sports Injury Prevention',
           description: 'Tips to prevent common sports-related injuries'
         }
