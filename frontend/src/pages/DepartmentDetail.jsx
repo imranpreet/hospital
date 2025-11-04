@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { 
   ArrowLeft, Stethoscope, Users, Clock, Award, 
   CheckCircle, Calendar, Heart, Activity, PlayCircle,
-  BookOpen, Phone, Mail
+  BookOpen, Phone, Mail, ArrowRight
 } from 'lucide-react'
 
 export default function DepartmentDetail() {
@@ -361,27 +361,39 @@ export default function DepartmentDetail() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8 + idx * 0.1 }}
-                className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition group'
+                className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition group cursor-pointer'
+                onClick={() => window.open(`https://www.youtube.com/watch?v=${video.id}`, '_blank')}
               >
-                <div className='relative aspect-video bg-slate-900'>
-                  <iframe
-                    className='w-full h-full'
-                    src={`https://www.youtube-nocookie.com/embed/${video.id}`}
-                    title={video.title}
-                    frameBorder='0'
-                    loading='lazy'
-                    referrerPolicy='no-referrer-when-downgrade'
-                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                    allowFullScreen
-                  ></iframe>
-                  {/* Fallback link if iframe is blocked by browser or network */}
-                  <noscript className='block p-3 bg-slate-100 text-slate-700 text-sm'>
-                    Video may be blocked. <a className='text-blue-600 underline' href={`https://www.youtube.com/watch?v=${video.id}`} target='_blank' rel='noreferrer'>Open on YouTube</a>
-                  </noscript>
+                <div className='relative aspect-video bg-gradient-to-br from-red-500 to-red-600 overflow-hidden'>
+                  {/* YouTube Thumbnail */}
+                  <img 
+                    src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+                    alt={video.title}
+                    className='w-full h-full object-cover'
+                    onError={(e) => {
+                      // Fallback to medium quality thumbnail if maxres doesn't exist
+                      e.target.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`
+                    }}
+                  />
+                  {/* Play Button Overlay */}
+                  <div className='absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition'>
+                    <div className='w-20 h-20 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition shadow-2xl'>
+                      <PlayCircle className='w-12 h-12 text-white fill-current' />
+                    </div>
+                  </div>
+                  {/* YouTube Badge */}
+                  <div className='absolute top-3 right-3 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1'>
+                    <PlayCircle className='w-3 h-3' />
+                    Watch on YouTube
+                  </div>
                 </div>
                 <div className='p-4'>
                   <h3 className='font-bold text-slate-800 mb-2 group-hover:text-blue-600 transition'>{video.title}</h3>
-                  <p className='text-sm text-slate-600'>{video.description}</p>
+                  <p className='text-sm text-slate-600 mb-3'>{video.description}</p>
+                  <div className='flex items-center gap-2 text-sm text-blue-600 font-semibold'>
+                    <span>Click to watch</span>
+                    <ArrowRight className='w-4 h-4 group-hover:translate-x-1 transition' />
+                  </div>
                 </div>
               </motion.div>
             ))}
