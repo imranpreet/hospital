@@ -366,12 +366,18 @@ export default function DepartmentDetail() {
                 <div className='relative aspect-video bg-slate-900'>
                   <iframe
                     className='w-full h-full'
-                    src={`https://www.youtube.com/embed/${video.id}`}
+                    src={`https://www.youtube-nocookie.com/embed/${video.id}`}
                     title={video.title}
                     frameBorder='0'
+                    loading='lazy'
+                    referrerPolicy='no-referrer-when-downgrade'
                     allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
                     allowFullScreen
                   ></iframe>
+                  {/* Fallback link if iframe is blocked by browser or network */}
+                  <noscript className='block p-3 bg-slate-100 text-slate-700 text-sm'>
+                    Video may be blocked. <a className='text-blue-600 underline' href={`https://www.youtube.com/watch?v=${video.id}`} target='_blank' rel='noreferrer'>Open on YouTube</a>
+                  </noscript>
                 </div>
                 <div className='p-4'>
                   <h3 className='font-bold text-slate-800 mb-2 group-hover:text-blue-600 transition'>{video.title}</h3>
