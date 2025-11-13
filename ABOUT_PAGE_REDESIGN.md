@@ -132,7 +132,7 @@ The About page has been completely redesigned to match the professional healthca
 
 ```
 ┌─────────────────────────────────────────┐
-│  Hero Section (Blue Background)        │
+│ `1 Hero Section (Blue Background)        │
 │  [Content Left] [Doctor Image Right]   │
 └─────────────────────────────────────────┘
 ┌─────────────────────────────────────────┐

@@ -6,7 +6,10 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, enum: ['admin', 'doctor', 'patient', 'staff'], default: 'patient' },
   contact: { type: String },
-  avatar: { type: String }
+  avatar: { type: String },
+  failedPasskeyAttempts: { type: Number, default: 0 },
+  isBlocked: { type: Boolean, default: false },
+  blockedAt: { type: Date }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

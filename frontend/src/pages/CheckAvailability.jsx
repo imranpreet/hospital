@@ -217,7 +217,26 @@ export default function CheckAvailability() {
     API.get('/doctors')
       .then(res => {
         if (res.data && res.data.length > 0) {
-          setDoctors(res.data)
+          // Add default availability for doctors that don't have it
+          const doctorsWithAvailability = res.data.map(doc => {
+            if (!doc.availability || Object.keys(doc.availability).length === 0) {
+              // Default availability: Monday-Friday 9 AM - 5 PM, Saturday morning
+              return {
+                ...doc,
+                availability: {
+                  monday: ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '03:00 PM', '04:00 PM'],
+                  tuesday: ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '03:00 PM', '04:00 PM'],
+                  wednesday: ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '03:00 PM', '04:00 PM'],
+                  thursday: ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '03:00 PM', '04:00 PM'],
+                  friday: ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '03:00 PM', '04:00 PM'],
+                  saturday: ['09:00 AM', '10:00 AM', '11:00 AM'],
+                  sunday: []
+                }
+              }
+            }
+            return doc
+          })
+          setDoctors(doctorsWithAvailability)
         } else {
           setDoctors(sampleDoctors)
         }
@@ -273,30 +292,28 @@ export default function CheckAvailability() {
         return
       }
 
-      // Check if selected time is in doctor's schedule
-      if (!doctorSlotsForDay.includes(formData.appointmentTime)) {
-        setAvailabilityResult({
-          available: false,
-          type: 'wrong-time',
-          doctor: selectedDoc,
-          message: `Dr. ${selectedDoc.name} is not available at ${formData.appointmentTime} on ${dayName}s.`,
-          suggestion: 'Please select one of the available time slots below:',
-          availableSlots: doctorSlotsForDay
-        })
-        setCheckingAvailability(false)
-        return
-      }
-
-      // Check for conflicting appointments from ALL sources
-      const allAppointments = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
-      const doctorAppointments = allAppointments[selectedDoc._id] || []
+      // IMPORTANT: Only check for ACTUAL appointment conflicts
+      // Don't restrict based on predefined time slots
       
-      // Also check appointments from the main appointments list
+      console.log('=== AVAILABILITY CHECK STARTED ===')
+      console.log('Doctor:', selectedDoc.name, '| ID:', selectedDoc._id)
+      console.log('Selected Date:', formData.appointmentDate)
+      console.log('Selected Time:', formData.appointmentTime)
+      console.log('Day of Week:', dayName)
+      
+      // Check ALL possible appointment sources in localStorage
+      const doctorAppointments1 = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
+      const doctorAppointmentsForThisDoc = doctorAppointments1[selectedDoc._id] || []
+      
       const mainAppointments = JSON.parse(localStorage.getItem('appointments') || '[]')
       
-      // Combine all appointments for this doctor
+      console.log('📦 Storage Check:')
+      console.log('  - doctorAppointments for this doctor:', doctorAppointmentsForThisDoc.length, 'appointments')
+      console.log('  - Main appointments:', mainAppointments.length, 'total appointments')
+      
+      // Combine all appointments for this specific doctor
       const combinedAppointments = [
-        ...doctorAppointments,
+        ...doctorAppointmentsForThisDoc,
         ...mainAppointments.filter(apt => 
           apt.doctorId === selectedDoc._id || 
           apt.doctor === selectedDoc.name ||
@@ -304,30 +321,45 @@ export default function CheckAvailability() {
         )
       ]
       
-      console.log('Checking appointments for doctor:', selectedDoc.name)
-      console.log('Doctor ID:', selectedDoc._id)
-      console.log('Selected Date:', formData.appointmentDate)
-      console.log('Selected Time:', formData.appointmentTime)
-      console.log('All appointments for this doctor:', combinedAppointments)
+      console.log('📋 Total combined appointments for this doctor:', combinedAppointments.length)
+      console.log('All appointments:', combinedAppointments)
+      console.log('📋 Total combined appointments for this doctor:', combinedAppointments.length)
+      console.log('All appointments:', combinedAppointments)
       
+      // NOW check if there's a conflict with same date AND same time
+      console.log('\n🔍 Checking for conflicts...')
       const conflict = combinedAppointments.find(apt => {
-        const isSameDate = apt.appointmentDate === formData.appointmentDate || apt.date === formData.appointmentDate
-        const isSameTime = apt.appointmentTime === formData.appointmentTime || apt.time === formData.appointmentTime
-        const isPending = apt.status === 'pending' || apt.status === 'scheduled' || !apt.status
+        const appointmentDate = apt.appointmentDate || apt.date
+        const appointmentTime = apt.appointmentTime || apt.time
+        const appointmentStatus = apt.status
         
-        console.log('Checking appointment:', apt)
-        console.log('Same date?', isSameDate, 'Same time?', isSameTime, 'Pending?', isPending)
+        const isSameDate = appointmentDate === formData.appointmentDate
+        const isSameTime = appointmentTime === formData.appointmentTime
+        const isPending = appointmentStatus === 'pending' || appointmentStatus === 'scheduled' || !appointmentStatus
+        
+        console.log('  Checking:', {
+          patient: apt.patientName || apt.patient || 'Unknown',
+          date: appointmentDate,
+          time: appointmentTime,
+          status: appointmentStatus,
+          isSameDate,
+          isSameTime,
+          isPending,
+          conflicts: isSameDate && isSameTime && isPending
+        })
         
         return isSameDate && isSameTime && isPending
       })
 
       if (conflict) {
-        console.log('CONFLICT FOUND:', conflict)
+        console.log('\n❌ CONFLICT FOUND:', conflict)
+        console.log('Reason: Another patient already has appointment at this time')
         
+        // Find alternative available slots
         const alternativeSlots = doctorSlotsForDay.filter(slot => 
           !combinedAppointments.some(apt => {
-            const isSameDate = apt.appointmentDate === formData.appointmentDate || apt.date === formData.appointmentDate
-            const isSameTime = apt.appointmentTime === slot || apt.time === slot
+            const isSameDate = (apt.appointmentDate || apt.date) === formData.appointmentDate
+            const isSameTime = (apt.appointmentTime || apt.time) === slot
             const isPending = apt.status === 'pending' || apt.status === 'scheduled' || !apt.status
             return isSameDate && isSameTime && isPending
           })
@@ -344,7 +376,7 @@ export default function CheckAvailability() {
           availableSlots: alternativeSlots,
           conflictWith: conflict.patientName || conflict.patient || 'Another patient',
           bookedSlots: combinedAppointments
-            .filter(apt => (apt.appointmentDate === formData.appointmentDate || apt.date === formData.appointmentDate) && 
+            .filter(apt => ((apt.appointmentDate || apt.date) === formData.appointmentDate) && 
                            (apt.status === 'pending' || apt.status === 'scheduled' || !apt.status))
             .map(apt => apt.appointmentTime || apt.time)
         })
@@ -352,7 +384,9 @@ export default function CheckAvailability() {
         return
       }
       
-      console.log('NO CONFLICT - Doctor is available!')
+      console.log('\n✅ NO CONFLICT FOUND!')
+      console.log('Doctor is AVAILABLE at this time')
+      console.log('=== AVAILABILITY CHECK COMPLETED ===\n')
 
       // Doctor is available!
       setAvailabilityResult({
@@ -604,6 +638,33 @@ export default function CheckAvailability() {
               </>
             )}
           </button>
+        </motion.div>
+
+        {/* Info Box - What we check */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className='bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-6'
+        >
+          <h3 className='font-bold text-blue-900 mb-3 flex items-center gap-2'>
+            <AlertCircle className='w-5 h-5' />
+            How Availability Check Works
+          </h3>
+          <div className='space-y-2 text-sm text-blue-800'>
+            <p className='flex items-start gap-2'>
+              <CheckCircle className='w-4 h-4 text-green-600 flex-shrink-0 mt-0.5' />
+              <span>✅ <strong>Doctor works on selected day</strong> - We verify the doctor is scheduled to work</span>
+            </p>
+            <p className='flex items-start gap-2'>
+              <CheckCircle className='w-4 h-4 text-green-600 flex-shrink-0 mt-0.5' />
+              <span>✅ <strong>No appointment conflicts</strong> - We check if another patient has booked the same time</span>
+            </p>
+            <p className='flex items-start gap-2'>
+              <CheckCircle className='w-4 h-4 text-green-600 flex-shrink-0 mt-0.5' />
+              <span>✅ <strong>Real-time status</strong> - Get instant confirmation before booking</span>
+            </p>
+          </div>
         </motion.div>
 
         {/* Availability Result */}

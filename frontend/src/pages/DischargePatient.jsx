@@ -66,11 +66,6 @@ export default function DischargePatient() {
         sound.play().catch(() => {})
       } catch (err) {}
       
-      // Automatically navigate back to Ward Management after 2 seconds
-      setTimeout(() => {
-        navigate('/wards')
-      }, 2000)
-      
     } catch (err) {
       console.error('Discharge error:', err)
       console.error('Error response:', err.response)
@@ -142,7 +137,7 @@ export default function DischargePatient() {
                     View Ward Dashboard
                   </button>
                   <button
-                    onClick={() => navigate(`/billing`)}
+                    onClick={() => navigate('/billing', { state: { dischargeData } })}
                     className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition font-semibold'
                   >
                     Generate Bill

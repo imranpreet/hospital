@@ -568,12 +568,198 @@ export default function Home(){
 
           <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
             {[
-              { name: 'General Medicine', icon: Activity, color: 'from-blue-500 to-blue-600', desc: 'Comprehensive primary healthcare and chronic disease management' },
-              { name: 'Cardiology', icon: Heart, color: 'from-red-500 to-pink-600', desc: 'Advanced cardiac care and heart disease treatment' },
-              { name: 'Orthopedics', icon: Activity, color: 'from-orange-500 to-red-600', desc: 'Bone, joint, and musculoskeletal system care' },
-              { name: 'Pediatrics', icon: Users, color: 'from-purple-500 to-pink-600', desc: 'Specialized healthcare for infants and children' },
-              { name: 'Gynecology', icon: Heart, color: 'from-pink-500 to-rose-600', desc: 'Women\'s health and reproductive care' },
-              { name: 'Emergency Care', icon: Activity, color: 'from-red-600 to-orange-600', desc: '24/7 emergency medical services' }
+              { 
+                name: 'General Medicine', 
+                title: 'General Medicine',
+                icon: Activity, 
+                color: 'from-blue-500 to-blue-600', 
+                desc: 'Comprehensive primary healthcare and chronic disease management',
+                detailedInfo: {
+                  overview: 'Our General Medicine department provides comprehensive healthcare services for adults, focusing on prevention, diagnosis, and treatment of a wide range of medical conditions.',
+                  services: [
+                    { 
+                      title: 'Preventive Health Check-ups',
+                      desc: 'Annual physical examinations, health screenings, and vaccination programs',
+                      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Chronic Disease Management',
+                      desc: 'Expert care for diabetes, hypertension, asthma, and other chronic conditions',
+                      image: 'https://images.unsplash.com/photo-1584362917165-526a968579e8?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Diagnostic Services',
+                      desc: 'Complete diagnostic facilities including lab tests, ECG, and imaging services',
+                      image: 'https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Health Counseling',
+                      desc: 'Personalized lifestyle guidance, nutrition advice, and wellness programs',
+                      image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&h=600&fit=crop&q=80'
+                    }
+                  ]
+                }
+              },
+              { 
+                name: 'Cardiology',
+                title: 'Cardiology',
+                icon: Heart, 
+                color: 'from-red-500 to-pink-600', 
+                desc: 'Advanced cardiac care and heart disease treatment',
+                detailedInfo: {
+                  overview: 'Our Cardiology department specializes in the diagnosis and treatment of heart-related conditions with cutting-edge technology and experienced cardiologists.',
+                  services: [
+                    {
+                      title: 'Advanced Cardiac Diagnostics',
+                      desc: 'Comprehensive ECG, Echocardiography, stress testing, CT angiography, and advanced cardiac imaging',
+                      image: 'https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Interventional Cardiology',
+                      desc: 'Minimally invasive procedures including angioplasty, coronary stenting, and pacemaker implantation',
+                      image: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Heart Disease Prevention',
+                      desc: 'Risk assessment, cholesterol management, hypertension control, and personalized cardiac care programs',
+                      image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Cardiac Rehabilitation',
+                      desc: 'Structured post-surgery recovery programs, exercise therapy, and lifestyle modification support',
+                      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop&q=80'
+                    }
+                  ]
+                }
+              },
+              { 
+                name: 'Orthopedics',
+                title: 'Orthopedics',
+                icon: Activity, 
+                color: 'from-orange-500 to-red-600', 
+                desc: 'Bone, joint, and musculoskeletal system care',
+                detailedInfo: {
+                  overview: 'Specialized care for bone, joint, ligament, and muscle disorders with advanced surgical and non-surgical treatment options.',
+                  services: [
+                    {
+                      title: 'Joint Replacement Surgery',
+                      desc: 'Hip, knee, and shoulder replacement with latest prosthetic technology',
+                      image: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Sports Medicine',
+                      desc: 'Treatment of sports injuries, ACL/MCL repairs, and athletic performance',
+                      image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Fracture Management',
+                      desc: 'Expert care for all types of fractures with advanced fixation techniques',
+                      image: 'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Physiotherapy',
+                      desc: 'Comprehensive rehabilitation programs for faster recovery',
+                      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop&q=80'
+                    }
+                  ]
+                }
+              },
+              { 
+                name: 'Pediatrics',
+                title: 'Pediatrics',
+                icon: Users, 
+                color: 'from-purple-500 to-pink-600', 
+                desc: 'Specialized healthcare for infants and children',
+                detailedInfo: {
+                  overview: 'Dedicated pediatric care from newborns to adolescents with child-friendly environment and specialized pediatricians.',
+                  services: [
+                    {
+                      title: 'Newborn & Infant Care',
+                      desc: 'NICU facilities, neonatal care, and comprehensive growth monitoring',
+                      image: 'https://images.unsplash.com/photo-1551884170-09fb70a3a2ed?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Vaccination Programs',
+                      desc: 'Complete immunization schedule as per WHO guidelines',
+                      image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Child Development',
+                      desc: 'Growth monitoring, developmental assessments, and pediatric nutrition',
+                      image: 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Pediatric Emergency',
+                      desc: '24/7 emergency care for children with specialized pediatric ICU',
+                      image: 'https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?w=800&h=600&fit=crop&q=80'
+                    }
+                  ]
+                }
+              },
+              { 
+                name: 'Gynecology',
+                title: 'Gynecology',
+                icon: Heart, 
+                color: 'from-pink-500 to-rose-600', 
+                desc: 'Women\'s health and reproductive care',
+                detailedInfo: {
+                  overview: 'Comprehensive women\'s healthcare services covering prenatal care, delivery, and gynecological treatments.',
+                  services: [
+                    {
+                      title: 'Prenatal & Postnatal Care',
+                      desc: 'Complete pregnancy care with regular antenatal check-ups and ultrasounds',
+                      image: 'https://images.unsplash.com/photo-1581056771107-24ca5f033842?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Delivery Services',
+                      desc: 'Safe delivery with modern labor rooms and NICU backup facility',
+                      image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Infertility Treatment',
+                      desc: 'Advanced fertility treatments including IVF, IUI, and ICSI',
+                      image: 'https://images.unsplash.com/photo-1579154341900-f5b37c95f0ab?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Gynecological Surgery',
+                      desc: 'Laparoscopic surgeries and minimally invasive procedures',
+                      image: 'https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&h=600&fit=crop&q=80'
+                    }
+                  ]
+                }
+              },
+              { 
+                name: 'Emergency Care',
+                title: 'Emergency Care',
+                icon: Activity, 
+                color: 'from-red-600 to-orange-600', 
+                desc: '24/7 emergency medical services',
+                detailedInfo: {
+                  overview: 'Round-the-clock emergency services with advanced trauma care, ambulance services, and critical care facilities.',
+                  services: [
+                    {
+                      title: '24/7 Emergency Department',
+                      desc: 'Always-ready emergency team with rapid triage and immediate treatment',
+                      image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Ambulance Services',
+                      desc: 'Advanced life support ambulances with GPS tracking and trained paramedics',
+                      image: 'https://images.unsplash.com/photo-1587745416684-47953f16f02f?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Trauma Center',
+                      desc: 'Specialized trauma care for road accidents and critical injuries',
+                      image: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=800&h=600&fit=crop&q=80'
+                    },
+                    {
+                      title: 'Critical Care ICU',
+                      desc: 'State-of-the-art intensive care with advanced monitoring systems',
+                      image: 'https://images.unsplash.com/photo-1579684453423-f84349ef60b0?w=800&h=600&fit=crop&q=80'
+                    }
+                  ]
+                }
+              }
             ].map((dept, idx) => (
               <motion.div
                 key={idx}
@@ -581,13 +767,17 @@ export default function Home(){
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
+                onClick={() => setSelectedFeature(dept)}
                 className='bg-gradient-to-br from-slate-50 to-blue-50 p-6 rounded-2xl border border-slate-200 hover:shadow-xl transition group cursor-pointer'
               >
                 <div className={`w-14 h-14 bg-gradient-to-br ${dept.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition`}>
                   <dept.icon className='w-7 h-7 text-white' />
                 </div>
                 <h3 className='text-xl font-bold text-slate-900 mb-2'>{dept.name}</h3>
-                <p className='text-slate-600 text-sm leading-relaxed'>{dept.desc}</p>
+                <p className='text-slate-600 text-sm leading-relaxed mb-3'>{dept.desc}</p>
+                <div className='text-sky-600 font-semibold text-sm group-hover:text-sky-700 inline-flex items-center gap-1'>
+                  See Details →
+                </div>
               </motion.div>
             ))}
           </div>
@@ -685,14 +875,15 @@ export default function Home(){
 
       {/* Testimonials Section */}
       <section className='relative py-20 overflow-hidden'>
-        {/* Background Image with Overlay */}
+        {/* Background Image - Professional Hospital Theme - Clear and Sharp */}
         <div className='absolute inset-0 z-0'>
           <img 
-            src='https://images.unsplash.com/photo-1504813184591-01572f98c85f?w=1920&h=800&fit=crop' 
-            alt='Healthcare Background'
+            src='https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&h=1080&fit=crop&q=95' 
+            alt='Hospital Management Background'
             className='w-full h-full object-cover'
           />
-          <div className='absolute inset-0 bg-gradient-to-br from-white/95 via-blue-50/90 to-cyan-50/95'></div>
+          {/* Minimal overlay for text readability */}
+          <div className='absolute inset-0 bg-white/40'></div>
         </div>
 
         <div className='relative z-10 max-w-6xl mx-auto px-4'>
@@ -746,14 +937,14 @@ export default function Home(){
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.15 }}
-                className='bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-2xl shadow-lg hover:shadow-xl transition'
+                className='bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all border border-blue-100'
               >
                 <div className='flex items-center gap-4 mb-4'>
-                  <div className='w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center text-3xl'>
+                  <div className='w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center text-3xl shadow-lg'>
                     {testimonial.image}
                   </div>
                   <div>
-                    <h4 className='font-bold text-slate-900'>{testimonial.name}</h4>
+                    <h4 className='font-bold text-slate-900 text-lg'>{testimonial.name}</h4>
                     <p className='text-sm text-slate-600'>{testimonial.role}</p>
                   </div>
                 </div>
@@ -842,79 +1033,138 @@ export default function Home(){
 
                 {/* Modal Body */}
                 <div className='p-8 overflow-y-auto max-h-[calc(90vh-200px)]'>
-                  {/* Overview */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className='mb-8'
-                  >
-                    <p className='text-lg text-slate-700 leading-relaxed'>
-                      {selectedFeature.detailedInfo.overview}
-                    </p>
-                  </motion.div>
+                  {/* Check if it's a department (has detailedInfo.services) or regular feature */}
+                  {selectedFeature.detailedInfo?.services ? (
+                    <>
+                      {/* Department Overview */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className='mb-8'
+                      >
+                        <h3 className='text-2xl font-bold text-slate-900 mb-4'>Overview</h3>
+                        <p className='text-lg text-slate-700 leading-relaxed'>
+                          {selectedFeature.detailedInfo.overview}
+                        </p>
+                      </motion.div>
 
-                  {/* Benefits */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className='mb-8'
-                  >
-                    <h3 className='text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2'>
-                      <CheckCircle className='w-6 h-6 text-green-600' />
-                      Key Benefits
-                    </h3>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                      {selectedFeature.detailedInfo.benefits.map((benefit, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.3 + idx * 0.05 }}
-                          className='flex items-start gap-3 bg-green-50 p-3 rounded-lg border border-green-100'
-                        >
-                          <CheckCircle className='w-5 h-5 text-green-600 flex-shrink-0 mt-0.5' />
-                          <span className='text-slate-700'>{benefit}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
+                      {/* Services with Images */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className='mb-6'
+                      >
+                        <h3 className='text-2xl font-bold text-slate-900 mb-6'>Our Services & Specialties</h3>
+                        <div className='grid md:grid-cols-2 gap-6'>
+                          {selectedFeature.detailedInfo.services.map((service, idx) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.2 + idx * 0.1 }}
+                              className='bg-gradient-to-br from-slate-50 to-blue-50 rounded-xl overflow-hidden border border-slate-200 hover:shadow-lg transition group'
+                            >
+                              <div className='relative h-48 overflow-hidden'>
+                                <img 
+                                  src={service.image} 
+                                  alt={service.title}
+                                  className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
+                                />
+                                <div className='absolute inset-0 bg-gradient-to-t from-black/60 to-transparent'></div>
+                                <div className='absolute top-4 left-4'>
+                                  <div className={`w-12 h-12 bg-gradient-to-br ${selectedFeature.color} rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
+                                    {idx + 1}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className='p-5'>
+                                <h4 className='text-lg font-bold text-slate-900 mb-2'>{service.title}</h4>
+                                <p className='text-slate-600 text-sm leading-relaxed'>{service.desc}</p>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Regular Feature Content (existing code for non-department features) */}
+                      {/* Overview */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className='mb-8'
+                      >
+                        <p className='text-lg text-slate-700 leading-relaxed'>
+                          {selectedFeature.detailedInfo.overview}
+                        </p>
+                      </motion.div>
 
-                  {/* How It Works */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <h3 className='text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2'>
-                      <ArrowRight className='w-6 h-6 text-sky-600' />
-                      How It Works
-                    </h3>
-                    <div className='space-y-4'>
-                      {selectedFeature.detailedInfo.howItWorks.map((step, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.5 + idx * 0.1 }}
-                          className='flex items-start gap-4 bg-sky-50 p-4 rounded-lg border border-sky-100'
-                        >
-                          <div className='w-8 h-8 bg-sky-600 text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold'>
-                            {idx + 1}
-                          </div>
-                          <span className='text-slate-700 pt-1'>{step}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
+                      {/* Benefits */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className='mb-8'
+                      >
+                        <h3 className='text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2'>
+                          <CheckCircle className='w-6 h-6 text-green-600' />
+                          Key Benefits
+                        </h3>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                          {selectedFeature.detailedInfo.benefits.map((benefit, idx) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.3 + idx * 0.05 }}
+                              className='flex items-start gap-3 bg-green-50 p-3 rounded-lg border border-green-100'
+                            >
+                              <CheckCircle className='w-5 h-5 text-green-600 flex-shrink-0 mt-0.5' />
+                              <span className='text-slate-700'>{benefit}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </motion.div>
+
+                      {/* How It Works */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                      >
+                        <h3 className='text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2'>
+                          <ArrowRight className='w-6 h-6 text-sky-600' />
+                          How It Works
+                        </h3>
+                        <div className='space-y-4'>
+                          {selectedFeature.detailedInfo.howItWorks.map((step, idx) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.5 + idx * 0.1 }}
+                              className='flex items-start gap-4 bg-sky-50 p-4 rounded-lg border border-sky-100'
+                            >
+                              <div className='w-8 h-8 bg-sky-600 text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold'>
+                                {idx + 1}
+                              </div>
+                              <span className='text-slate-700 pt-1'>{step}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
 
                   {/* CTA Buttons */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.7 }}
-                    className='mt-8 flex flex-wrap gap-4'
+                    className='mt-8 flex flex-wrap gap-4 pt-6 border-t'
                   >
                     <button
                       onClick={() => {
@@ -930,8 +1180,8 @@ export default function Home(){
                       }}
                       className='flex-1 min-w-[200px] px-6 py-3 bg-sky-600 text-white rounded-lg font-semibold hover:bg-sky-700 transition-colors flex items-center justify-center gap-2'
                     >
+                      <Calendar className='w-5 h-5' />
                       Book Appointment
-                      <ArrowRight className='w-5 h-5' />
                     </button>
                     <button
                       onClick={() => {

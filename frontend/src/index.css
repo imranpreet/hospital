@@ -10,3 +10,40 @@ body{
 .hero-bg{
   background: linear-gradient(90deg, rgba(14,165,233,0.08), rgba(14,165,233,0.02));
 }
+
+/* Print Styles for Patient Bill */
+@media print {
+  @page {
+    size: A4;
+    margin: 1cm;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .print\:hidden {
+    display: none !important;
+  }
+
+  .print\:bg-white {
+    background: white !important;
+  }
+
+  .print\:shadow-none {
+    box-shadow: none !important;
+  }
+
+  .print\:border-0 {
+    border: 0 !important;
+  }
+
+  button {
+    display: none !important;
+  }
+
+  /* Ensure proper page breaks */
+  .avoid-break {
+    page-break-inside: avoid;
+  }
+}

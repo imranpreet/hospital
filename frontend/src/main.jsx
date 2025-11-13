@@ -22,6 +22,7 @@ import TestAvailability from './pages/TestAvailability'
 import WardManagement from './pages/WardManagement'
 import AdmitPatient from './pages/AdmitPatient'
 import DischargePatient from './pages/DischargePatient'
+import PatientBill from './pages/PatientBill'
 import DepartmentDetail from './pages/DepartmentDetail'
 
 function App(){
@@ -37,6 +38,7 @@ function App(){
         <Route path='/wards' element={<WardManagement/>} />
         <Route path='/wards/admit' element={<AdmitPatient/>} />
         <Route path='/wards/discharge/:patientId' element={<DischargePatient/>} />
+        <Route path='/billing' element={<PatientBill/>} />
         
         {/* All other routes with Layout */}
         <Route path='/*' element={

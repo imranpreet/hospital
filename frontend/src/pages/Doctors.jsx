@@ -699,6 +699,47 @@ export default function Doctors(){
       </div>
 
       <div className='max-w-7xl mx-auto px-4 py-12'>
+        {/* Important Notice: Check Availability First */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.5 }}
+          className='bg-gradient-to-br from-blue-600 to-cyan-600 rounded-3xl shadow-2xl p-8 mb-10 border-4 border-blue-400'
+        >
+          <div className='flex items-center justify-between gap-6 flex-wrap'>
+            <div className='flex items-center gap-4 flex-1'>
+              <div className='w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg'>
+                <Calendar className='w-9 h-9 text-blue-600' />
+              </div>
+              <div className='text-white'>
+                <h3 className='text-2xl font-extrabold mb-1'>📅 Book an Appointment?</h3>
+                <p className='text-blue-100 text-lg font-medium'>
+                  First check doctor availability to ensure your preferred time slot is open!
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => navigate('/check-availability')}
+              className='px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:bg-blue-50 transition-all flex items-center gap-3'
+            >
+              <Calendar className='w-6 h-6' />
+              Check Availability Now
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+              >
+                →
+              </motion.span>
+            </button>
+          </div>
+          <div className='mt-4 bg-white/10 rounded-xl p-4 backdrop-blur-sm'>
+            <p className='text-white/90 text-sm flex items-center gap-2'>
+              <CheckCircle className='w-5 h-5 text-green-300' />
+              <strong>Why check first?</strong> Avoid conflicts, see real-time status, get alternative slots if needed, and confirm before booking!
+            </p>
+          </div>
+        </motion.div>
+
         {/* Search Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

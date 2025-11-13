@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import API from '../api'
 import { motion } from 'framer-motion'
-import { Calendar, Clock, User, Stethoscope, CheckCircle, AlertCircle } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { Calendar, Clock, User, Stethoscope, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export default function Appointment(){
   const navigate = useNavigate()
+  const location = useLocation()
   const [doctors, setDoctors] = useState([])
   const [doctorId, setDoctorId] = useState('')
   const [date, setDate] = useState('')
@@ -20,8 +21,22 @@ export default function Appointment(){
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [step, setStep] = useState(1)
+  const [hasCheckedAvailability, setHasCheckedAvailability] = useState(false)
 
   useEffect(()=>{
+    // Check if user came from availability check with valid data
+    const availabilityData = location.state
+    
+    if (availabilityData && availabilityData.selectedDoctor) {
+      // User came from CheckAvailability page
+      setHasCheckedAvailability(true)
+      setDoctorId(availabilityData.selectedDoctor._id)
+      setDate(availabilityData.appointmentDate)
+      setTime(availabilityData.appointmentTime)
+      setPatientName(availabilityData.patientName)
+      setPatientProblem(availabilityData.problem)
+    }
+    
     // Check if user is logged in
     const token = localStorage.getItem('token')
     if (!token) {
@@ -34,13 +49,26 @@ export default function Appointment(){
     API.setToken(token)
     
     API.get('/doctors').then(res=>{
-      setDoctors(res.data)
-      // Don't auto-select, let user choose
+      if (res.data && res.data.length > 0) {
+        setDoctors(res.data)
+        setError('') // Clear any previous errors
+      } else {
+        setError('No doctors available at the moment. Please try again later.')
+      }
     }).catch((err)=>{
       console.error('Error fetching doctors:', err)
-      setError('Failed to load doctors. Please refresh the page.')
+      if (err.response) {
+        // Server responded with error
+        setError(`Server Error: ${err.response.data.message || 'Failed to load doctors'}`)
+      } else if (err.request) {
+        // Request was made but no response
+        setError('Cannot connect to server. Please make sure the backend is running on port 5000.')
+      } else {
+        // Something else happened
+        setError('Failed to load doctors. Please refresh the page.')
+      }
     })
-  },[navigate])
+  },[navigate, location])
 
   const handleCreatePatient = async (e) => {
     e.preventDefault()
@@ -235,6 +263,67 @@ export default function Appointment(){
   return (
     <div className='min-h-screen bg-gradient-to-br from-sky-50 via-white to-blue-50 py-12'>
       <div className='max-w-3xl mx-auto px-4'>
+        
+        {/* Require Availability Check Warning */}
+        {!hasCheckedAvailability && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className='bg-gradient-to-br from-yellow-50 to-orange-50 border-4 border-orange-400 rounded-3xl shadow-2xl p-8 mb-6'
+          >
+            <div className='flex items-start gap-4 mb-6'>
+              <div className='w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center flex-shrink-0'>
+                <AlertCircle className='w-10 h-10 text-white' />
+              </div>
+              <div>
+                <h2 className='text-3xl font-extrabold text-orange-900 mb-2'>
+                  ⚠️ Availability Check Required
+                </h2>
+                <p className='text-lg text-orange-800 mb-4'>
+                  To ensure your appointment is confirmed, you must first check doctor availability before booking.
+                </p>
+              </div>
+            </div>
+
+            <div className='bg-white rounded-2xl p-6 border-2 border-orange-300 mb-6'>
+              <h3 className='text-xl font-bold text-gray-800 mb-3'>Why Check Availability First?</h3>
+              <ul className='space-y-2 text-gray-700'>
+                <li className='flex items-start gap-2'>
+                  <CheckCircle className='w-5 h-5 text-green-600 flex-shrink-0 mt-0.5' />
+                  <span><strong>Avoid Conflicts:</strong> Ensure your selected time slot is available</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <CheckCircle className='w-5 h-5 text-green-600 flex-shrink-0 mt-0.5' />
+                  <span><strong>See Real-time Status:</strong> Know if doctor is working on your chosen date</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <CheckCircle className='w-5 h-5 text-green-600 flex-shrink-0 mt-0.5' />
+                  <span><strong>Get Alternative Slots:</strong> View other available times if your choice is booked</span>
+                </li>
+                <li className='flex items-start gap-2'>
+                  <CheckCircle className='w-5 h-5 text-green-600 flex-shrink-0 mt-0.5' />
+                  <span><strong>Confirm Before Booking:</strong> Get instant confirmation before submitting</span>
+                </li>
+              </ul>
+            </div>
+
+            <button
+              onClick={() => navigate('/check-availability')}
+              className='w-full flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-2xl hover:from-orange-700 hover:to-red-700 transition-all font-bold text-xl shadow-lg hover:shadow-xl hover:-translate-y-1'
+            >
+              <Calendar className='w-7 h-7' />
+              Check Doctor Availability First
+              <ArrowRight className='w-7 h-7' />
+            </button>
+
+            <p className='text-center text-sm text-orange-700 mt-4 font-semibold'>
+              💡 This ensures your appointment is confirmed without any conflicts!
+            </p>
+          </motion.div>
+        )}
+
+        {/* Original Appointment Form - Only show if availability checked */}
+        {hasCheckedAvailability && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -278,8 +367,21 @@ export default function Appointment(){
                 <div className='flex items-start gap-3'>
                   <AlertCircle className='w-6 h-6 text-red-600 mt-0.5 flex-shrink-0' />
                   <div className='flex-1'>
-                    <h4 className='font-bold text-red-800 mb-2 text-lg'>Appointment Conflict</h4>
-                    <p className='text-red-700 whitespace-pre-line leading-relaxed'>{error}</p>
+                    <h4 className='font-bold text-red-800 mb-2 text-lg'>
+                      {error.includes('Cannot connect') || error.includes('Failed to load doctors') ? 'Connection Error' : 'Appointment Conflict'}
+                    </h4>
+                    <p className='text-red-700 whitespace-pre-line leading-relaxed mb-3'>{error}</p>
+                    {(error.includes('Cannot connect') || error.includes('Failed to load doctors')) && (
+                      <button
+                        onClick={() => window.location.reload()}
+                        className='px-4 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-all text-sm flex items-center gap-2'
+                      >
+                        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' />
+                        </svg>
+                        Retry
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -484,6 +586,8 @@ export default function Appointment(){
             )}
           </div>
         </motion.div>
+        )}
+        {/* End of hasCheckedAvailability conditional */}
       </div>
     </div>
   )

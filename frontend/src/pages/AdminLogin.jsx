@@ -2,39 +2,48 @@ import React, { useState } from 'react'
 import API from '../api'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Shield, Mail, Lock } from 'lucide-react'
+import { Shield, Mail, Lock, Key, AlertTriangle } from 'lucide-react'
 
 export default function AdminLogin(){
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [passkey, setPasskey] = useState('')
   const [err, setErr] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [warningMsg, setWarningMsg] = useState(null)
+  const [isBlocked, setIsBlocked] = useState(false)
   const nav = useNavigate()
 
   async function submit(e){
     e.preventDefault()
     setErr(null)
+    setWarningMsg(null)
     setLoading(true)
     
     try{
-      const res = await API.post('/auth/login', { email, password })
+      const res = await API.post('/auth/admin-login', { email, password, passkey })
       const { token, user } = res.data
       
-      // Check if user is actually an admin
-      if (user.role !== 'admin') {
-        setErr('Access Denied: Admin credentials required')
-        setLoading(false)
-        return
-      }
-      
       localStorage.setItem('token', token)
-      localStorage.setItem('userRole', 'admin') // Store as admin
+      localStorage.setItem('userRole', 'admin')
       API.setToken(token)
       
-      // Always redirect to admin dashboard
+      // Show success message
+      alert('Admin login successful!')
       nav('/dashboard')
     }catch(e){
-      setErr(e.response?.data?.msg || 'Login failed')
+      const errorData = e.response?.data
+      
+      if (errorData?.isBlocked) {
+        setIsBlocked(true)
+        setErr(errorData.msg)
+      } else if (errorData?.remainingAttempts !== undefined) {
+        setWarningMsg(errorData.msg)
+        setErr(null)
+      } else {
+        setErr(errorData?.msg || 'Login failed')
+        setWarningMsg(null)
+      }
     }
     setLoading(false)
   }
@@ -56,7 +65,34 @@ export default function AdminLogin(){
             <p className='text-slate-600 mt-2'>Secure login for administrators</p>
           </div>
 
-          {err && (
+          {/* Blocked Account Message */}
+          {isBlocked && (
+            <div className='mb-6 p-4 bg-red-100 border-2 border-red-600 rounded-lg'>
+              <div className='flex items-start gap-3'>
+                <AlertTriangle className='w-6 h-6 text-red-600 flex-shrink-0 mt-0.5' />
+                <div>
+                  <h3 className='font-bold text-red-900 mb-1'>Account Blocked!</h3>
+                  <p className='text-sm text-red-800'>{err}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Warning Message (wrong passkey attempts) */}
+          {warningMsg && !isBlocked && (
+            <div className='mb-6 p-4 bg-orange-50 border-2 border-orange-400 rounded-lg'>
+              <div className='flex items-start gap-3'>
+                <AlertTriangle className='w-6 h-6 text-orange-600 flex-shrink-0 mt-0.5' />
+                <div>
+                  <h3 className='font-bold text-orange-900 mb-1'>Warning!</h3>
+                  <p className='text-sm text-orange-800'>{warningMsg}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Regular Error Message */}
+          {err && !isBlocked && !warningMsg && (
             <div className='mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm'>
               {err}
             </div>
@@ -72,7 +108,8 @@ export default function AdminLogin(){
                   required
                   value={email}
                   onChange={e=>setEmail(e.target.value)}
-                  className='w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent' 
+                  disabled={isBlocked}
+                  className='w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent disabled:bg-slate-100 disabled:cursor-not-allowed' 
                   placeholder='admin@citycare.com' 
                 />
               </div>
@@ -87,19 +124,41 @@ export default function AdminLogin(){
                   required
                   value={password}
                   onChange={e=>setPassword(e.target.value)}
-                  className='w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent' 
+                  disabled={isBlocked}
+                  className='w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent disabled:bg-slate-100 disabled:cursor-not-allowed' 
                   placeholder='••••••••' 
                 />
               </div>
             </div>
 
+            <div>
+              <label className='block text-sm font-medium text-slate-700 mb-2'>
+                Admin Passkey <span className='text-red-600'>*</span>
+              </label>
+              <div className='relative'>
+                <Key className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400' />
+                <input 
+                  type='password'
+                  required
+                  value={passkey}
+                  onChange={e=>setPasskey(e.target.value)}
+                  disabled={isBlocked}
+                  className='w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent disabled:bg-slate-100 disabled:cursor-not-allowed' 
+                  placeholder='Enter admin passkey' 
+                />
+              </div>
+              <p className='text-xs text-slate-500 mt-1'>
+                ⚠️ You have 3 attempts. Account will be blocked after 3 failed attempts.
+              </p>
+            </div>
+
             <button 
               type='submit'
-              disabled={loading}
+              disabled={loading || isBlocked}
               className='w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2'
             >
               <Shield className='w-5 h-5' />
-              {loading ? 'Verifying...' : 'Admin Sign In'}
+              {loading ? 'Verifying...' : isBlocked ? 'Account Blocked' : 'Admin Sign In'}
             </button>
           </form>
 

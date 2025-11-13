@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import API from '../api'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Shield, Mail, Lock, User } from 'lucide-react'
+import { Shield, Mail, Lock, User, Key, Info } from 'lucide-react'
 
 export default function AdminRegister(){
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [passkey, setPasskey] = useState('')
   const [err, setErr] = useState(null)
   const [loading, setLoading] = useState(false)
   const nav = useNavigate()
@@ -15,6 +16,13 @@ export default function AdminRegister(){
   async function submit(e){
     e.preventDefault()
     setErr(null)
+    
+    // Validate passkey
+    if (passkey !== 'HM@Admin2025$Secure') {
+      setErr('Invalid admin passkey! Please contact system administrator for the correct passkey.')
+      return
+    }
+    
     setLoading(true)
     
     try{
@@ -28,10 +36,10 @@ export default function AdminRegister(){
       const { token, user } = res.data
       
       localStorage.setItem('token', token)
-      localStorage.setItem('userRole', 'admin') // Store as admin
+      localStorage.setItem('userRole', 'admin')
       API.setToken(token)
       
-      // Redirect to admin dashboard
+      alert('Admin account created successfully!')
       nav('/dashboard')
     }catch(e){
       setErr(e.response?.data?.msg || 'Registration failed')
@@ -54,6 +62,17 @@ export default function AdminRegister(){
             </div>
             <h1 className='text-3xl font-bold text-slate-900'>Admin Registration</h1>
             <p className='text-slate-600 mt-2'>Create administrator account</p>
+          </div>
+
+          {/* Info Box */}
+          <div className='mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg'>
+            <div className='flex items-start gap-3'>
+              <Info className='w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5' />
+              <div className='text-sm text-blue-800'>
+                <p className='font-semibold mb-1'>Admin Passkey Required</p>
+                <p>You need the system admin passkey to create an admin account. Contact your system administrator if you don't have it.</p>
+              </div>
+            </div>
           </div>
 
           {err && (
@@ -108,6 +127,26 @@ export default function AdminRegister(){
                 />
               </div>
               <p className='text-xs text-slate-500 mt-1'>Minimum 6 characters</p>
+            </div>
+
+            <div>
+              <label className='block text-sm font-medium text-slate-700 mb-2'>
+                Admin Passkey <span className='text-red-600'>*</span>
+              </label>
+              <div className='relative'>
+                <Key className='absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400' />
+                <input 
+                  type='password'
+                  required
+                  value={passkey}
+                  onChange={e=>setPasskey(e.target.value)}
+                  className='w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent' 
+                  placeholder='Enter system admin passkey' 
+                />
+              </div>
+              <p className='text-xs text-slate-500 mt-1'>
+                Required to verify admin registration authorization
+              </p>
             </div>
 
             <button 

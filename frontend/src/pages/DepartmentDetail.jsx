@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useParams, useNavigate } from 'react-router-dom'
 import { 
   ArrowLeft, Stethoscope, Users, Clock, Award, 
   CheckCircle, Calendar, Heart, Activity, PlayCircle,
-  BookOpen, Phone, Mail, ArrowRight
+  BookOpen, Phone, Mail, ArrowRight, Info, X
 } from 'lucide-react'
 
 export default function DepartmentDetail() {
   const { departmentName } = useParams()
   const navigate = useNavigate()
   const [department, setDepartment] = useState(null)
+  const [showInfo, setShowInfo] = useState(false)
+  const [hoveredPoint, setHoveredPoint] = useState(null)
 
   const departmentData = {
     'general-medicine': {
@@ -36,21 +38,31 @@ export default function DepartmentDetail() {
         { title: 'Advanced Diagnostics', description: 'State-of-the-art diagnostic facilities for accurate diagnosis', icon: Activity },
         { title: 'Patient-Centered Care', description: 'Personalized treatment plans tailored to individual needs', icon: Heart }
       ],
-      videos: [
-        {
-          id: 'dQw4w9WgXcQ',
-          title: 'Introduction to General Medicine',
-          description: 'Understanding the role and importance of general medicine in healthcare'
+      displayImage: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=1200&h=800&fit=crop&q=80',
+      detailedInfo: [
+        { 
+          point: 'Comprehensive Primary Care Services',
+          description: 'We provide complete healthcare services for all age groups with experienced physicians specializing in preventive medicine and routine health management',
+          image: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&h=600&fit=crop&q=80',
+          color: 'from-blue-500 to-cyan-500'
         },
-        {
-          id: 'jNQXAC9IVRw',
-          title: 'Common Health Issues & Prevention',
-          description: 'Learn about common health problems and preventive measures'
+        { 
+          point: 'Advanced Diagnostic Facilities',
+          description: 'State-of-the-art laboratory, X-ray, ultrasound, and imaging equipment ensuring accurate diagnosis and timely treatment',
+          image: 'https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=800&h=600&fit=crop&q=80',
+          color: 'from-purple-500 to-pink-500'
         },
-        {
-          id: '9bZkp7q19f0',
-          title: 'Importance of Regular Check-ups',
-          description: 'Why regular health screenings are crucial for early disease detection'
+        { 
+          point: 'Preventive Health Programs',
+          description: 'Comprehensive health screenings, vaccination programs, and wellness initiatives designed to prevent diseases before they develop',
+          image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop&q=80',
+          color: 'from-green-500 to-teal-500'
+        },
+        { 
+          point: 'Chronic Disease Management',
+          description: 'Expert care for diabetes, hypertension, asthma, and other long-term conditions with personalized treatment plans',
+          image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&h=600&fit=crop&q=80',
+          color: 'from-orange-500 to-red-500'
         }
       ],
       whyChooseUs: [
@@ -62,7 +74,7 @@ export default function DepartmentDetail() {
         'Electronic health records for seamless care coordination'
       ]
     },
-    'cardiology': {
+    'cardiology': {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
       name: 'Cardiology',
       icon: Heart,
       color: 'from-red-500 to-pink-600',
@@ -85,21 +97,31 @@ export default function DepartmentDetail() {
         { title: 'Emergency Services', description: '24/7 emergency cardiac care available', icon: Clock },
         { title: 'Holistic Approach', description: 'Complete cardiac care from prevention to rehabilitation', icon: Heart }
       ],
-      videos: [
-        {
-          id: 'dQw4w9WgXcQ',
-          title: 'Understanding Heart Disease',
-          description: 'Learn about different types of heart conditions and their symptoms'
+      displayImage: 'https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?w=1200&h=800&fit=crop&q=80',
+      detailedInfo: [
+        { 
+          point: 'Advanced Cardiac Diagnostics',
+          description: 'Comprehensive ECG, Echocardiography, stress testing, CT angiography, and advanced cardiac imaging technologies for precise heart condition diagnosis',
+          image: 'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=800&h=600&fit=crop&q=80',
+          color: 'from-red-500 to-pink-500'
         },
-        {
-          id: 'jNQXAC9IVRw',
-          title: 'Heart Attack: Signs & Prevention',
-          description: 'Recognize warning signs and learn how to prevent heart attacks'
+        { 
+          point: 'Interventional Cardiology',
+          description: 'Minimally invasive procedures including angioplasty, coronary stenting, pacemaker implantation, and advanced cardiac interventions',
+          image: 'https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?w=800&h=600&fit=crop&q=80',
+          color: 'from-rose-500 to-red-500'
         },
-        {
-          id: '9bZkp7q19f0',
-          title: 'Cardiac Rehabilitation',
-          description: 'The importance of rehabilitation after cardiac procedures'
+        { 
+          point: 'Heart Disease Prevention & Management',
+          description: 'Comprehensive risk assessment, cholesterol management, hypertension control, and personalized cardiac care programs',
+          image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop&q=80',
+          color: 'from-pink-500 to-purple-500'
+        },
+        { 
+          point: 'Cardiac Rehabilitation',
+          description: 'Structured post-surgery recovery programs, exercise therapy, nutritional counseling, and lifestyle modification support',
+          image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop&q=80',
+          color: 'from-orange-500 to-amber-500'
         }
       ],
       whyChooseUs: [
@@ -134,21 +156,31 @@ export default function DepartmentDetail() {
         { title: 'Chronic Disease Management', description: 'Expert care for long-term health conditions', icon: Activity },
         { title: 'Multidisciplinary Approach', description: 'Coordinated care with specialists', icon: Users }
       ],
-      videos: [
-        {
-          id: 'dQw4w9WgXcQ',
-          title: 'Internal Medicine Overview',
-          description: 'What is internal medicine and what do internists do?'
+      displayImage: 'https://images.unsplash.com/photo-1582560469781-1965b9af903d?w=1200&h=800&fit=crop&q=80',
+      detailedInfo: [
+        { 
+          point: 'Comprehensive Adult Care',
+          description: 'Expert management of complex multi-system diseases, infectious conditions, and chronic adult health issues with personalized treatment approaches',
+          image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&h=600&fit=crop&q=80',
+          color: 'from-cyan-500 to-blue-500'
         },
-        {
-          id: 'jNQXAC9IVRw',
-          title: 'Managing Chronic Diseases',
-          description: 'Effective strategies for managing long-term health conditions'
+        { 
+          point: 'Diabetes & Endocrine Care',
+          description: 'Comprehensive diabetes management, thyroid disorders, hormonal imbalances, insulin therapy, and metabolic disease treatment',
+          image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=800&h=600&fit=crop&q=80',
+          color: 'from-blue-500 to-indigo-500'
         },
-        {
-          id: '9bZkp7q19f0',
-          title: 'Preventive Healthcare',
-          description: 'The importance of preventive care in adult health'
+        { 
+          point: 'Hypertension & Cardiac Risk Management',
+          description: 'Advanced blood pressure monitoring, medication optimization, cardiovascular risk assessment, and preventive cardiology services',
+          image: 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&h=600&fit=crop&q=80',
+          color: 'from-purple-500 to-pink-500'
+        },
+        { 
+          point: 'Respiratory & Pulmonary Medicine',
+          description: 'Treatment for asthma, COPD, pneumonia, and other respiratory conditions with pulmonary function testing and therapy',
+          image: 'https://images.unsplash.com/photo-1583324113626-70df0f4deaab?w=800&h=600&fit=crop&q=80',
+          color: 'from-teal-500 to-cyan-500'
         }
       ],
       whyChooseUs: [
@@ -183,21 +215,31 @@ export default function DepartmentDetail() {
         { title: 'Sports Medicine', description: 'Specialized care for athletic injuries', icon: Users },
         { title: 'Rehabilitation', description: 'Comprehensive post-operative physiotherapy', icon: Heart }
       ],
-      videos: [
-        {
-          id: 'dQw4w9WgXcQ',
-          title: 'Understanding Orthopedics',
-          description: 'Overview of orthopedic conditions and treatments'
+      displayImage: 'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=1200&h=800&fit=crop&q=80',
+      detailedInfo: [
+        { 
+          point: 'Joint Replacement Surgery',
+          description: 'Advanced total hip, knee, and shoulder replacement procedures using latest prosthetic technology with minimally invasive techniques',
+          image: 'https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=800&h=600&fit=crop&q=80',
+          color: 'from-orange-500 to-red-500'
         },
-        {
-          id: 'jNQXAC9IVRw',
-          title: 'Joint Replacement Surgery',
-          description: 'What to expect from hip and knee replacement procedures'
+        { 
+          point: 'Sports Medicine & Injury Care',
+          description: 'Comprehensive treatment for athletic injuries, ACL reconstruction, ligament repairs, and sports performance optimization',
+          image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=600&fit=crop&q=80',
+          color: 'from-blue-500 to-cyan-500'
         },
-        {
-          id: '9bZkp7q19f0',
-          title: 'Sports Injury Prevention',
-          description: 'Tips to prevent common sports-related injuries'
+        { 
+          point: 'Arthroscopic & Minimally Invasive Surgery',
+          description: 'Advanced keyhole surgery for joint problems, faster recovery, reduced scarring, and shorter hospital stays',
+          image: 'https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=800&h=600&fit=crop&q=80',
+          color: 'from-purple-500 to-indigo-500'
+        },
+        { 
+          point: 'Spine Surgery & Rehabilitation',
+          description: 'Comprehensive spine care including disc replacement, spinal fusion, scoliosis correction, and post-operative physiotherapy',
+          image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop&q=80',
+          color: 'from-green-500 to-teal-500'
         }
       ],
       whyChooseUs: [
@@ -342,57 +384,228 @@ export default function DepartmentDetail() {
           </div>
         </motion.section>
 
-        {/* Educational Videos */}
+        {/* Educational GIF & Information */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
           className='mb-16'
         >
-          <h2 className='text-3xl font-bold text-slate-800 mb-2 flex items-center gap-3'>
-            <PlayCircle className='w-8 h-8 text-blue-600' />
-            Educational Videos
-          </h2>
-          <p className='text-slate-600 mb-8'>Learn more about {department.name} through these informative videos</p>
-          <div className='grid md:grid-cols-1 lg:grid-cols-2 gap-8'>
-            {department.videos.map((video, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.8 + idx * 0.1 }}
-                className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition'
-              >
-                {/* Video Player */}
-                <div className='relative aspect-video bg-slate-900'>
-                  <iframe
-                    src={`https://www.youtube.com/embed/${video.id}?rel=0&modestbranding=1`}
-                    title={video.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className='w-full h-full'
-                  ></iframe>
-                </div>
+          <div className='text-center mb-12'>
+            <h2 className='text-3xl font-bold text-slate-800 mb-3 flex items-center justify-center gap-3'>
+              <Info className='w-9 h-9 text-blue-600' />
+              Visual Guide & Detailed Information
+            </h2>
+            <p className='text-slate-600 text-lg max-w-2xl mx-auto'>
+              Explore comprehensive information about {department.name} services and specialties
+            </p>
+          </div>
+          
+          <div className='max-w-4xl mx-auto'>
+            {/* Professional Image Display */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className='bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl overflow-hidden shadow-2xl mb-8'
+            >
+              <div className='relative h-96 overflow-hidden bg-slate-100'>
+                <img 
+                  src={department.displayImage}
+                  alt={`${department.name} Services`}
+                  className='w-full h-full object-cover'
+                />
+                <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent'></div>
                 
-                {/* Video Info */}
-                <div className='p-5 bg-gradient-to-br from-slate-50 to-blue-50'>
-                  <h3 className='font-bold text-lg text-slate-800 mb-2'>{video.title}</h3>
-                  <p className='text-sm text-slate-600 mb-4'>{video.description}</p>
-                  
-                  {/* Open on YouTube Button */}
-                  <button
-                    onClick={() => window.open(`https://www.youtube.com/watch?v=${video.id}`, '_blank')}
-                    className='flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 font-semibold group'
+                {/* Overlay Text */}
+                <div className='absolute bottom-0 left-0 right-0 p-8 text-white'>
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
                   >
-                    <PlayCircle className='w-4 h-4' />
-                    <span>Watch on YouTube</span>
-                    <ArrowRight className='w-4 h-4 group-hover:translate-x-1 transition' />
+                    <h3 className='text-3xl font-bold mb-2'>{department.name} Excellence</h3>
+                    <p className='text-white/90 text-lg'>Advanced medical care with state-of-the-art facilities</p>
+                  </motion.div>
+                </div>
+              </div>
+              
+              <div className='p-8 text-center'>
+                <h3 className='text-2xl font-bold text-slate-800 mb-3'>
+                  Learn More About {department.name}
+                </h3>
+                <p className='text-slate-600 mb-6'>
+                  Click below to explore detailed information with interactive features
+                </p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowInfo(true)}
+                  className='px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full font-semibold text-lg hover:from-blue-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-xl flex items-center gap-3 mx-auto'
+                >
+                  <Info className='w-6 h-6' />
+                  <span>View Detailed Information</span>
+                  <ArrowRight className='w-5 h-5' />
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        {/* Interactive Information Modal */}
+        <AnimatePresence>
+          {showInfo && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowInfo(false)}
+              className='fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto'
+            >
+              <motion.div
+                initial={{ scale: 0.9, y: 50 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 50 }}
+                onClick={(e) => e.stopPropagation()}
+                className='bg-white rounded-3xl max-w-6xl w-full my-8 shadow-2xl overflow-hidden'
+              >
+                {/* Modal Header */}
+                <div className={`bg-gradient-to-r ${department.color} p-8 text-white relative overflow-hidden`}>
+                  <div className='absolute inset-0 opacity-10'>
+                    <div className='absolute top-0 right-0 w-96 h-96 bg-white rounded-full -mr-48 -mt-48'></div>
+                    <div className='absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full -ml-32 -mb-32'></div>
+                  </div>
+                  
+                  <button
+                    onClick={() => setShowInfo(false)}
+                    className='absolute top-6 right-6 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all hover:rotate-90 duration-300 z-10'
+                  >
+                    <X className='w-6 h-6' />
+                  </button>
+                  
+                  <div className='relative z-10'>
+                    <h2 className='text-4xl font-bold mb-2'>Detailed Information</h2>
+                    <p className='text-white/90 text-lg'>{department.name} Services & Specialties</p>
+                  </div>
+                </div>
+
+                {/* Modal Body with Interactive Points */}
+                <div className='p-8 max-h-[70vh] overflow-y-auto'>
+                  <div className='grid md:grid-cols-2 gap-6'>
+                    {department.detailedInfo.map((info, idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        onMouseEnter={() => setHoveredPoint(idx)}
+                        onMouseLeave={() => setHoveredPoint(null)}
+                        className='relative group'
+                      >
+                        <motion.div
+                          animate={{
+                            scale: hoveredPoint === idx ? 1.03 : 1,
+                          }}
+                          transition={{ type: "spring", stiffness: 300 }}
+                          className='h-full bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all cursor-pointer border-2 border-transparent hover:border-blue-300'
+                        >
+                          {/* Image Section */}
+                          <div className='relative h-48 overflow-hidden'>
+                            <motion.img 
+                              src={info.image}
+                              alt={info.point}
+                              animate={{
+                                scale: hoveredPoint === idx ? 1.1 : 1,
+                              }}
+                              transition={{ duration: 0.4 }}
+                              className='w-full h-full object-cover'
+                            />
+                            <div className={`absolute inset-0 bg-gradient-to-t ${info.color} opacity-60`}></div>
+                            
+                            {/* Number Badge */}
+                            <motion.div
+                              animate={{
+                                rotate: hoveredPoint === idx ? 360 : 0,
+                                scale: hoveredPoint === idx ? 1.2 : 1,
+                              }}
+                              transition={{ duration: 0.5 }}
+                              className='absolute top-4 left-4 w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-xl'
+                            >
+                              <span className={`bg-gradient-to-r ${info.color} bg-clip-text text-transparent font-bold text-2xl`}>
+                                {idx + 1}
+                              </span>
+                            </motion.div>
+
+                            {/* Hover Arrow */}
+                            <motion.div
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ 
+                                opacity: hoveredPoint === idx ? 1 : 0,
+                                x: hoveredPoint === idx ? 0 : -10
+                              }}
+                              className='absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg'
+                            >
+                              <ArrowRight className='w-5 h-5 text-blue-600' />
+                            </motion.div>
+                          </div>
+
+                          {/* Content Section */}
+                          <div className={`p-6 bg-gradient-to-br from-white to-slate-50`}>
+                            <motion.h3
+                              animate={{
+                                x: hoveredPoint === idx ? 5 : 0,
+                              }}
+                              className={`font-bold text-lg mb-3 bg-gradient-to-r ${info.color} bg-clip-text text-transparent`}
+                            >
+                              {info.point}
+                            </motion.h3>
+                            <motion.p
+                              animate={{
+                                opacity: hoveredPoint === idx ? 1 : 0.8,
+                              }}
+                              className='text-slate-600 text-sm leading-relaxed'
+                            >
+                              {info.description}
+                            </motion.p>
+
+                            {/* Bottom Gradient Bar */}
+                            <motion.div
+                              animate={{
+                                width: hoveredPoint === idx ? '100%' : '0%',
+                              }}
+                              transition={{ duration: 0.3 }}
+                              className={`h-1 bg-gradient-to-r ${info.color} rounded-full mt-4`}
+                            ></motion.div>
+                          </div>
+                        </motion.div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Modal Footer */}
+                <div className='bg-gradient-to-r from-slate-50 to-blue-50 p-6 flex justify-center gap-4'>
+                  <button
+                    onClick={() => {
+                      setShowInfo(false)
+                      navigate('/appointment')
+                    }}
+                    className='px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2'
+                  >
+                    <Calendar className='w-5 h-5' />
+                    Book Appointment
+                  </button>
+                  <button
+                    onClick={() => setShowInfo(false)}
+                    className='px-6 py-3 bg-white text-slate-700 rounded-xl font-semibold hover:bg-slate-100 transition-all border-2 border-slate-200 flex items-center gap-2'
+                  >
+                    Close
                   </button>
                 </div>
               </motion.div>
-            ))}
-          </div>
-        </motion.section>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Why Choose Us */}
         <motion.section
