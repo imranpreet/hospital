@@ -29,7 +29,5 @@ services:
     publishDir: dist
     envVars:
       - key: VITE_API_URL
-        fromService:
-          type: web
-          name: hospital-backend
-          property: host
+        value: https://hospital-backend.onrender.com/api
+
