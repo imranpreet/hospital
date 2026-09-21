@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,8 +9,56 @@ body{
   font-family: 'Poppins', sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: #0f172a;
+  font-family: 'Archivo Black', 'Arial Black', sans-serif;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  animation: heading-typewriter 1.1s steps(24, end) both;
+}
+
+h1 {
+  font-size: clamp(2.6rem, 5vw, 5.2rem);
+}
+
+h2 {
+  font-size: clamp(2.2rem, 4vw, 4rem);
+}
+
+h3 {
+  font-size: clamp(1.7rem, 2.8vw, 2.8rem);
+}
+
+h4 {
+  font-size: clamp(1.35rem, 2.1vw, 2rem);
+}
+
+h5 {
+  font-size: clamp(1.15rem, 1.7vw, 1.55rem);
+}
+
+h6 {
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+}
+
+@keyframes heading-typewriter {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  h1, h2, h3, h4, h5, h6 {
+    animation: none;
+  }
+}
+
 .hero-bg{
-  background: linear-gradient(90deg, rgba(14,165,233,0.08), rgba(14,165,233,0.02));
+  background: linear-gradient(90deg, rgba(8,123,184,0.08), rgba(8,123,184,0.02));
 }
 
 /* Print Styles for Patient Bill */

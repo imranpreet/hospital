@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import API from '../api'
-import { 
-  Calendar, Clock, User, FileText, Stethoscope, 
-  CheckCircle, X, AlertCircle, ArrowRight, RefreshCw 
+import {
+  Calendar, Clock, User, FileText, Stethoscope,
+  CheckCircle, X, AlertCircle, ArrowRight, RefreshCw
 } from 'lucide-react'
 
 export default function CheckAvailability() {
@@ -12,7 +12,7 @@ export default function CheckAvailability() {
   const [doctors, setDoctors] = useState([])
   const [loading, setLoading] = useState(true)
   const [checkingAvailability, setCheckingAvailability] = useState(false)
-  
+
   const [formData, setFormData] = useState({
     patientName: '',
     problem: '',
@@ -21,7 +21,7 @@ export default function CheckAvailability() {
     appointmentDate: '',
     appointmentTime: ''
   })
-  
+
   const [availabilityResult, setAvailabilityResult] = useState(null)
 
   // Problem categories mapped to specializations
@@ -258,7 +258,7 @@ export default function CheckAvailability() {
 
   // Check doctor availability
   const checkAvailability = () => {
-    if (!formData.patientName || !formData.problem || !formData.selectedDoctor || 
+    if (!formData.patientName || !formData.problem || !formData.selectedDoctor ||
         !formData.appointmentDate || !formData.appointmentTime) {
       alert('Please fill all fields')
       return
@@ -266,17 +266,17 @@ export default function CheckAvailability() {
 
     setCheckingAvailability(true)
     const selectedDoc = doctors.find(d => d._id === formData.selectedDoctor)
-    
+
     // Get day of week
     const dateObj = new Date(formData.appointmentDate)
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
     const dayName = days[dateObj.getDay()]
-    
+
     // Simulate checking delay
     setTimeout(() => {
       // Check if doctor works on this day
       const doctorSlotsForDay = selectedDoc.availability?.[dayName] || []
-      
+
       if (doctorSlotsForDay.length === 0) {
         setAvailabilityResult({
           available: false,
@@ -294,49 +294,49 @@ export default function CheckAvailability() {
 
       // IMPORTANT: Only check for ACTUAL appointment conflicts
       // Don't restrict based on predefined time slots
-      
+
       console.log('=== AVAILABILITY CHECK STARTED ===')
       console.log('Doctor:', selectedDoc.name, '| ID:', selectedDoc._id)
       console.log('Selected Date:', formData.appointmentDate)
       console.log('Selected Time:', formData.appointmentTime)
       console.log('Day of Week:', dayName)
-      
+
       // Check ALL possible appointment sources in localStorage
       const doctorAppointments1 = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
       const doctorAppointmentsForThisDoc = doctorAppointments1[selectedDoc._id] || []
-      
+
       const mainAppointments = JSON.parse(localStorage.getItem('appointments') || '[]')
-      
+
       console.log('📦 Storage Check:')
       console.log('  - doctorAppointments for this doctor:', doctorAppointmentsForThisDoc.length, 'appointments')
       console.log('  - Main appointments:', mainAppointments.length, 'total appointments')
-      
+
       // Combine all appointments for this specific doctor
       const combinedAppointments = [
         ...doctorAppointmentsForThisDoc,
-        ...mainAppointments.filter(apt => 
-          apt.doctorId === selectedDoc._id || 
+        ...mainAppointments.filter(apt =>
+          apt.doctorId === selectedDoc._id ||
           apt.doctor === selectedDoc.name ||
           apt.doctorName === selectedDoc.name
         )
       ]
-      
+
       console.log('📋 Total combined appointments for this doctor:', combinedAppointments.length)
       console.log('All appointments:', combinedAppointments)
       console.log('📋 Total combined appointments for this doctor:', combinedAppointments.length)
       console.log('All appointments:', combinedAppointments)
-      
+
       // NOW check if there's a conflict with same date AND same time
       console.log('\n🔍 Checking for conflicts...')
       const conflict = combinedAppointments.find(apt => {
         const appointmentDate = apt.appointmentDate || apt.date
         const appointmentTime = apt.appointmentTime || apt.time
         const appointmentStatus = apt.status
-        
+
         const isSameDate = appointmentDate === formData.appointmentDate
         const isSameTime = appointmentTime === formData.appointmentTime
         const isPending = appointmentStatus === 'pending' || appointmentStatus === 'scheduled' || !appointmentStatus
-        
+
         console.log('  Checking:', {
           patient: apt.patientName || apt.patient || 'Unknown',
           date: appointmentDate,
@@ -347,16 +347,16 @@ export default function CheckAvailability() {
           isPending,
           conflicts: isSameDate && isSameTime && isPending
         })
-        
+
         return isSameDate && isSameTime && isPending
       })
 
       if (conflict) {
         console.log('\n❌ CONFLICT FOUND:', conflict)
         console.log('Reason: Another patient already has appointment at this time')
-        
+
         // Find alternative available slots
-        const alternativeSlots = doctorSlotsForDay.filter(slot => 
+        const alternativeSlots = doctorSlotsForDay.filter(slot =>
           !combinedAppointments.some(apt => {
             const isSameDate = (apt.appointmentDate || apt.date) === formData.appointmentDate
             const isSameTime = (apt.appointmentTime || apt.time) === slot
@@ -370,20 +370,20 @@ export default function CheckAvailability() {
           type: 'busy',
           doctor: selectedDoc,
           message: `❌ Sorry! Dr. ${selectedDoc.name} is BUSY at ${formData.appointmentTime} on ${new Date(formData.appointmentDate).toLocaleDateString()}.`,
-          suggestion: alternativeSlots.length > 0 
+          suggestion: alternativeSlots.length > 0
             ? `Another patient "${conflict.patientName || conflict.patient || 'Someone'}" already has an appointment at this time. Please reschedule by selecting one of these available time slots:`
             : `All time slots are fully booked for ${new Date(formData.appointmentDate).toLocaleDateString()}. Please select a different day.`,
           availableSlots: alternativeSlots,
           conflictWith: conflict.patientName || conflict.patient || 'Another patient',
           bookedSlots: combinedAppointments
-            .filter(apt => ((apt.appointmentDate || apt.date) === formData.appointmentDate) && 
+            .filter(apt => ((apt.appointmentDate || apt.date) === formData.appointmentDate) &&
                            (apt.status === 'pending' || apt.status === 'scheduled' || !apt.status))
             .map(apt => apt.appointmentTime || apt.time)
         })
         setCheckingAvailability(false)
         return
       }
-      
+
       console.log('\n✅ NO CONFLICT FOUND!')
       console.log('Doctor is AVAILABLE at this time')
       console.log('=== AVAILABILITY CHECK COMPLETED ===\n')
@@ -404,7 +404,7 @@ export default function CheckAvailability() {
   // Book appointment
   const proceedToBooking = () => {
     const selectedDoc = doctors.find(d => d._id === formData.selectedDoctor)
-    
+
     // Save appointment
     const newAppointment = {
       id: Date.now(),
@@ -415,7 +415,7 @@ export default function CheckAvailability() {
       appointmentTime: formData.appointmentTime,
       status: 'pending'
     }
-    
+
     const allAppointments = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
     const doctorAppointments = allAppointments[selectedDoc._id] || []
     doctorAppointments.push(newAppointment)
@@ -433,15 +433,15 @@ export default function CheckAvailability() {
     window.dispatchEvent(new CustomEvent('newNotification', { detail: notification }))
 
     alert(`✅ Appointment Confirmed!\n\nPatient: ${formData.patientName}\nDoctor: Dr. ${selectedDoc.name}\nDate: ${new Date(formData.appointmentDate).toLocaleDateString()}\nTime: ${formData.appointmentTime}`)
-    
-    navigate('/appointment', { 
-      state: { 
+
+    navigate('/appointment', {
+      state: {
         selectedDoctor: selectedDoc,
         patientName: formData.patientName,
         problem: formData.problem,
         appointmentDate: formData.appointmentDate,
         appointmentTime: formData.appointmentTime
-      } 
+      }
     })
   }
 
@@ -458,7 +458,7 @@ export default function CheckAvailability() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-12'>
+    <div className='min-h-screen bg-[#eef8fc] py-12'>
       <div className='max-w-4xl mx-auto px-4'>
         {/* Header */}
         <motion.div
@@ -617,10 +617,10 @@ export default function CheckAvailability() {
           {/* Check Availability Button */}
           <button
             onClick={checkAvailability}
-            disabled={!formData.patientName || !formData.problem || !formData.selectedDoctor || 
+            disabled={!formData.patientName || !formData.problem || !formData.selectedDoctor ||
                      !formData.appointmentDate || !formData.appointmentTime || checkingAvailability}
             className={`w-full mt-8 flex items-center justify-center gap-3 px-8 py-5 rounded-2xl transition-all font-bold text-xl shadow-lg ${
-              formData.patientName && formData.problem && formData.selectedDoctor && 
+              formData.patientName && formData.problem && formData.selectedDoctor &&
               formData.appointmentDate && formData.appointmentTime && !checkingAvailability
                 ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 hover:shadow-xl hover:-translate-y-1'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -734,11 +734,11 @@ export default function CheckAvailability() {
                     <div>
                       <span className='text-gray-600 font-semibold'>Date:</span>
                       <p className='text-gray-800 font-bold text-lg'>
-                        {new Date(availabilityResult.confirmedDate).toLocaleDateString('en-US', { 
-                          weekday: 'long', 
-                          year: 'numeric', 
-                          month: 'long', 
-                          day: 'numeric' 
+                        {new Date(availabilityResult.confirmedDate).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric'
                         })}
                       </p>
                     </div>

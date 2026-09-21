@@ -14,6 +14,8 @@ import AppointmentPage from './pages/Appointment'
 import Dashboard from './pages/Dashboard'
 import UserDashboard from './pages/UserDashboard'
 import PatientDashboard from './pages/PatientDashboard'
+import DoctorDashboard from './pages/DoctorDashboard'
+import StaffCollaboration from './pages/StaffCollaboration'
 import AllData from './pages/AllData'
 import Contact from './pages/Contact'
 import Pharmacy from './pages/Pharmacy'
@@ -24,6 +26,8 @@ import AdmitPatient from './pages/AdmitPatient'
 import DischargePatient from './pages/DischargePatient'
 import PatientBill from './pages/PatientBill'
 import DepartmentDetail from './pages/DepartmentDetail'
+import HelpDesk from './pages/HelpDesk'
+import PublicProjectPage from './pages/PublicProjectPage'
 
 function App(){
   return (
@@ -33,13 +37,17 @@ function App(){
         <Route path='/dashboard' element={<Dashboard/>} />
         <Route path='/user-dashboard' element={<UserDashboard/>} />
         <Route path='/patient-dashboard' element={<PatientDashboard/>} />
+        <Route path='/doctor-dashboard' element={<DoctorDashboard/>} />
+        <Route path='/staff-collaboration' element={<StaffCollaboration/>} />
+        <Route path='/help-desk' element={<HelpDesk/>} />
+        <Route path='/public-project/:slug' element={<PublicProjectPage/>} />
         <Route path='/all-data' element={<AllData/>} />
         <Route path='/pharmacy' element={<Pharmacy/>} />
         <Route path='/wards' element={<WardManagement/>} />
         <Route path='/wards/admit' element={<AdmitPatient/>} />
         <Route path='/wards/discharge/:patientId' element={<DischargePatient/>} />
         <Route path='/billing' element={<PatientBill/>} />
-        
+
         {/* All other routes with Layout */}
         <Route path='/*' element={
           <Layout>

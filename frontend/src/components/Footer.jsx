@@ -10,7 +10,7 @@ export default function Footer(){
           {/* About */}
           <div>
             <div className='flex items-center gap-2 mb-4'>
-              <Heart className='w-6 h-6 fill-current text-sky-400' />
+              <Heart className='w-6 h-6 fill-current text-[#087bb8]' />
               <span className='text-xl font-bold'>CityCare</span>
             </div>
             <p className='text-slate-400 text-sm mb-4'>
@@ -22,10 +22,10 @@ export default function Footer(){
           <div>
             <h3 className='font-semibold mb-4'>Quick Links</h3>
             <ul className='space-y-2 text-sm'>
-              <li><Link to='/' className='text-slate-400 hover:text-sky-400 transition'>Home</Link></li>
-              <li><Link to='/about' className='text-slate-400 hover:text-sky-400 transition'>About Us</Link></li>
-              <li><Link to='/doctors' className='text-slate-400 hover:text-sky-400 transition'>Our Doctors</Link></li>
-              <li><Link to='/appointment' className='text-slate-400 hover:text-sky-400 transition'>Book Appointment</Link></li>
+              <li><Link to='/' className='text-slate-400 hover:text-[#087bb8] transition'>Home</Link></li>
+              <li><Link to='/about' className='text-slate-400 hover:text-[#087bb8] transition'>About Us</Link></li>
+              <li><Link to='/doctors' className='text-slate-400 hover:text-[#087bb8] transition'>Our Doctors</Link></li>
+              <li><Link to='/appointment' className='text-slate-400 hover:text-[#087bb8] transition'>Book Appointment</Link></li>
             </ul>
           </div>
 
@@ -45,15 +45,15 @@ export default function Footer(){
             <h3 className='font-semibold mb-4'>Contact Us</h3>
             <ul className='space-y-3 text-sm'>
               <li className='flex items-start gap-2'>
-                <Phone className='w-4 h-4 text-sky-400 mt-0.5 flex-shrink-0' />
+                <Phone className='w-4 h-4 text-[#087bb8] mt-0.5 flex-shrink-0' />
                 <span className='text-slate-400'>+1 (555) 123-4567</span>
               </li>
               <li className='flex items-start gap-2'>
-                <Mail className='w-4 h-4 text-sky-400 mt-0.5 flex-shrink-0' />
+                <Mail className='w-4 h-4 text-[#087bb8] mt-0.5 flex-shrink-0' />
                 <span className='text-slate-400'>info@citycare.com</span>
               </li>
               <li className='flex items-start gap-2'>
-                <MapPin className='w-4 h-4 text-sky-400 mt-0.5 flex-shrink-0' />
+                <MapPin className='w-4 h-4 text-[#087bb8] mt-0.5 flex-shrink-0' />
                 <span className='text-slate-400'>123 Healthcare Ave, Medical District</span>
               </li>
             </ul>

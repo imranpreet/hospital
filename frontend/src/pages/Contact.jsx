@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, Phone, MapPin, Send, CheckCircle, Loader } from 'lucide-react'
 import axios from 'axios'
+import { API_BASE_URL } from '../api'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -29,12 +30,12 @@ export default function Contact() {
     setError('')
 
     try {
-      const response = await axios.post('http://localhost:5000/api/contact/submit', formData)
-      
+      const response = await axios.post(`${API_BASE_URL}/contact/submit`, formData)
+
       if (response.data.success) {
         setSuccess(true)
         setFormData({ name: '', email: '', phone: '', message: '' })
-        
+
         // Reset success message after 5 seconds
         setTimeout(() => {
           setSuccess(false)
@@ -52,13 +53,13 @@ export default function Contact() {
       {/* Hero Section with Background Image */}
       <section className='relative h-[500px] overflow-hidden'>
         {/* Background Image - Doctors Team */}
-        <div 
+        <div
           className='absolute inset-0 bg-cover bg-center'
           style={{
             backgroundImage: 'url(https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=1600&q=80)',
           }}
         >
-          <div className='absolute inset-0 bg-gradient-to-r from-slate-900/70 to-blue-900/70'></div>
+          <div className='absolute inset-0 bg-transparent'></div>
         </div>
 
         {/* Hero Content */}

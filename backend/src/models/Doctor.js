@@ -7,6 +7,7 @@ const scheduleSchema = new mongoose.Schema({
 
 const doctorSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  email: { type: String },
   specialization: { type: String },
   department: { type: String },
   schedule: [scheduleSchema],

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { FileSpreadsheet, Users, Stethoscope, Calendar, CheckCircle, Clock, Download, Filter, Search, User, Activity, AlertCircle, ArrowLeft, Mail, MessageSquare, Bed, Building2 } from 'lucide-react'
 import axios from 'axios'
-import API from '../api'
+import API, { API_BASE_URL } from '../api'
 
 export default function AllData() {
   const navigate = useNavigate()
@@ -94,10 +94,10 @@ export default function AllData() {
     try {
       const token = localStorage.getItem('token')
       const [messagesRes, statsRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/contact/all', {
+        axios.get(`${API_BASE_URL}/contact/all`, {
           headers: { Authorization: `Bearer ${token}` }
         }),
-        axios.get('http://localhost:5000/api/contact/stats', {
+        axios.get(`${API_BASE_URL}/contact/stats`, {
           headers: { Authorization: `Bearer ${token}` }
         })
       ])

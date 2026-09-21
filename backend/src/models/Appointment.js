@@ -6,6 +6,10 @@ const appointmentSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   time: { type: String },
   reason: { type: String }, // Patient's problem/disease
+  symptoms: { type: String },
+  aiSummary: { type: String },
+  recommendedDepartment: { type: String },
+  recommendedDoctor: { type: String },
   status: { type: String, enum: ['scheduled', 'completed', 'cancelled'], default: 'scheduled' }
 }, { timestamps: true });
 

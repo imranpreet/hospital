@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Plus, Minus, Trash2, ShoppingCart, DollarSign, User, Phone, CreditCard } from 'lucide-react'
 import axios from 'axios'
+import { API_BASE_URL } from '../api'
 
 export default function BillingModal({ show, onClose, medicines, onSaleComplete }) {
   const [cart, setCart] = useState([])
@@ -77,7 +78,7 @@ export default function BillingModal({ show, onClose, medicines, onSaleComplete 
     }
     
     try {
-      const response = await axios.post('http://localhost:5000/api/sales', {
+      const response = await axios.post(`${API_BASE_URL}/sales`, {
         items: cart,
         discount,
         customerName,

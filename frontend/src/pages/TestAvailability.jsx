@@ -105,11 +105,11 @@ export default function TestAvailability() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 py-12'>
+    <div className='min-h-screen bg-[#eef8fc] py-12'>
       <div className='max-w-2xl mx-auto px-4'>
         <div className='bg-white rounded-3xl shadow-2xl p-8'>
           <h1 className='text-3xl font-bold text-gray-800 mb-6'>Test Availability System</h1>
-          
+
           <div className='space-y-4'>
             <button
               onClick={seedTestAppointments}

@@ -34,7 +34,7 @@ export default function Header(){
 
     window.addEventListener('newNotification', handleNewNotification)
     window.addEventListener('notificationRemoved', handleNotificationRemoved)
-    
+
     return () => {
       window.removeEventListener('newNotification', handleNewNotification)
       window.removeEventListener('notificationRemoved', handleNotificationRemoved)
@@ -50,7 +50,7 @@ export default function Header(){
   }
 
   const markAsRead = (notificationId) => {
-    const updatedNotifications = notifications.map(n => 
+    const updatedNotifications = notifications.map(n =>
       n.id === notificationId ? { ...n, read: true } : n
     )
     setNotifications(updatedNotifications)
@@ -75,27 +75,27 @@ export default function Header(){
   return (
     <header className='bg-white shadow-sm sticky top-0 z-50'>
       <div className='max-w-6xl mx-auto px-4 py-4 flex items-center justify-between'>
-        <Link to='/' className='flex items-center gap-2 text-sky-600 font-bold text-xl hover:text-sky-700'>
+        <Link to='/' className='flex items-center gap-2 text-[#087bb8] font-bold text-xl hover:text-[#066896]'>
           <Heart className='w-6 h-6 fill-current' />
           <span>CityCare Hospital</span>
         </Link>
-        
+
         <nav className='hidden md:flex items-center gap-6'>
-          <Link to='/' className='text-slate-600 hover:text-sky-600 font-medium transition'>Home</Link>
-          <Link to='/about' className='text-slate-600 hover:text-sky-600 font-medium transition'>About</Link>
-          <Link to='/doctors' className='text-slate-600 hover:text-sky-600 font-medium transition'>Doctors</Link>
-          <Link to='/appointment' className='text-slate-600 hover:text-sky-600 font-medium transition'>Appointments</Link>
-          
+          <Link to='/' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>Home</Link>
+          <Link to='/about' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>About</Link>
+          <Link to='/doctors' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>Doctors</Link>
+          <Link to='/appointment' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>Appointments</Link>
+
           {/* Show Admin link only if user is not logged in */}
           {!token && (
-            <Link to='/admin-login' className='text-slate-600 hover:text-sky-600 font-medium transition'>Admin</Link>
+            <Link to='/admin-login' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>Admin</Link>
           )}
-          
+
           {/* Notification Button */}
           <div className="relative">
-            <button 
+            <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative text-slate-600 hover:text-sky-600 transition"
+              className="relative text-slate-600 hover:text-[#087bb8] transition"
             >
               <Bell size={22} />
               {unreadCount > 0 && (
@@ -111,9 +111,9 @@ export default function Header(){
                 <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
                   <h3 className="font-semibold text-gray-800">Notifications</h3>
                   {notifications.length > 0 && (
-                    <button 
+                    <button
                       onClick={markAllAsRead}
-                      className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                      className="text-xs text-[#087bb8] hover:text-[#066896] font-medium"
                     >
                       Mark all as read
                     </button>
@@ -128,8 +128,8 @@ export default function Header(){
                 ) : (
                   <div className="divide-y divide-gray-100">
                     {notifications.map((notification) => (
-                      <div 
-                        key={notification.id} 
+                      <div
+                        key={notification.id}
                         className={`p-4 hover:bg-gray-50 transition-colors ${!notification.read ? 'bg-blue-50' : ''}`}
                       >
                         <div className="flex justify-between items-start mb-2">
@@ -154,7 +154,7 @@ export default function Header(){
                         {!notification.read && (
                           <button
                             onClick={() => markAsRead(notification.id)}
-                            className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                            className="text-xs text-[#087bb8] hover:text-[#066896] font-medium"
                           >
                             Mark as read
                           </button>
@@ -166,16 +166,19 @@ export default function Header(){
               </div>
             )}
           </div>
-          
+
           {token ? (
             <>
               {/* Show Dashboard link based on user role */}
               {userRole === 'admin' ? (
-                <Link to='/dashboard' className='text-slate-600 hover:text-sky-600 font-medium transition'>Dashboard</Link>
+                <Link to='/dashboard' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>Dashboard</Link>
               ) : (
-                <Link to='/user-dashboard' className='text-slate-600 hover:text-sky-600 font-medium transition'>Dashboard</Link>
+                <Link to='/user-dashboard' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>Dashboard</Link>
               )}
-              <button 
+              {userRole === 'admin' && (
+                <Link to='/staff-collaboration' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>Team Desk</Link>
+              )}
+              <button
                 onClick={handleLogout}
                 className='px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 font-medium transition'
               >
@@ -184,8 +187,8 @@ export default function Header(){
             </>
           ) : (
             <>
-              <Link to='/login' className='text-slate-600 hover:text-sky-600 font-medium transition'>Login</Link>
-              <Link to='/register' className='px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 font-medium transition'>
+              <Link to='/login' className='text-slate-600 hover:text-[#087bb8] font-medium transition'>Login</Link>
+              <Link to='/register' className='px-4 py-2 bg-[#087bb8] text-white rounded-lg hover:bg-[#066896] font-medium transition'>
                 Register
               </Link>
             </>

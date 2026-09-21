@@ -24,12 +24,24 @@ export default function Doctors(){
   const [availabilityResult, setAvailabilityResult] = useState(null)
   const [checkingAvailability, setCheckingAvailability] = useState(false)
   const navigate = useNavigate()
-  
+
   const toggleEducation = (doctorId) => {
     setExpandedEducation(prev => ({
       ...prev,
       [doctorId]: !prev[doctorId]
     }))
+  }
+
+  const getDoctorImageFallback = (name = 'CityCare Doctor') => {
+    const initials = name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join('')
+      .toUpperCase()
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 640"><rect width="800" height="640" fill="#087bb8"/><circle cx="400" cy="250" r="112" fill="#dff1f9"/><path d="M210 610c18-126 92-190 190-190s172 64 190 190" fill="#dff1f9"/><text x="400" y="570" text-anchor="middle" font-family="Arial,sans-serif" font-size="74" font-weight="700" fill="#043d58">${initials}</text></svg>`
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
   }
 
   // Sample expert doctors with complete information
@@ -301,9 +313,11 @@ export default function Doctors(){
     // Fetch real doctors from backend
     API.get('/doctors')
       .then(res => {
-        // If backend has doctors, use them; otherwise use sample doctors
-        if (res.data && res.data.length > 0) {
-          setDoctors(res.data)
+        const backendDoctors = Array.isArray(res.data) ? res.data : []
+        if (backendDoctors.length > 0) {
+          const backendNames = new Set(backendDoctors.map(doctor => doctor.name?.trim().toLowerCase()))
+          const missingSampleDoctors = sampleDoctors.filter(doctor => !backendNames.has(doctor.name.toLowerCase()))
+          setDoctors([...backendDoctors, ...missingSampleDoctors])
         } else {
           setDoctors(sampleDoctors)
         }
@@ -316,7 +330,7 @@ export default function Doctors(){
       })
   }, [])
 
-  const filteredDoctors = doctors.filter(d => 
+  const filteredDoctors = doctors.filter(d =>
     d.name.toLowerCase().includes(search.toLowerCase()) ||
     d.specialization?.toLowerCase().includes(search.toLowerCase()) ||
     d.department?.toLowerCase().includes(search.toLowerCase())
@@ -338,15 +352,15 @@ export default function Doctors(){
     }
 
     setCheckingAvailability(true)
-    
+
     // Get the day of week from selected date (for reference only, not blocking)
     const selectedDateObj = new Date(bookingData.selectedDate)
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
     const dayName = days[selectedDateObj.getDay()]
-    
+
     // NOTE: We're not checking day-of-week restrictions anymore
     // Doctors can be booked any day, we only check for time slot conflicts
-    
+
     // Get all possible time slots from doctor's schedule (use all available slots from any day)
     let allDoctorSlots = []
     if (selectedDoctor.availability) {
@@ -358,7 +372,7 @@ export default function Doctors(){
         })
       })
     }
-    
+
     // If no availability data, allow standard time slots
     if (allDoctorSlots.length === 0) {
       allDoctorSlots = ['09:00 AM', '10:00 AM', '11:00 AM', '02:00 PM', '03:00 PM', '04:00 PM']
@@ -367,40 +381,40 @@ export default function Doctors(){
     // Check if doctor already has an appointment at this time - ENHANCED CHECKING
     const allAppointments = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
     const doctorAppointments = allAppointments[selectedDoctor._id] || []
-    
+
     // Also check main appointments list
     const mainAppointments = JSON.parse(localStorage.getItem('appointments') || '[]')
-    
+
     // Combine all appointments
     const combinedAppointments = [
       ...doctorAppointments,
-      ...mainAppointments.filter(apt => 
-        apt.doctorId === selectedDoctor._id || 
+      ...mainAppointments.filter(apt =>
+        apt.doctorId === selectedDoctor._id ||
         apt.doctor === selectedDoctor.name ||
         apt.doctorName === selectedDoctor.name
       )
     ]
-    
+
     console.log('🔍 Checking availability for:', selectedDoctor.name)
     console.log('📅 Selected Date:', bookingData.selectedDate)
     console.log('⏰ Selected Time:', bookingData.selectedTimeSlot)
     console.log('📋 All appointments:', combinedAppointments)
-    
+
     const conflictingAppointment = combinedAppointments.find(apt => {
       const isSameDate = apt.appointmentDate === bookingData.selectedDate || apt.date === bookingData.selectedDate
       const isSameTime = apt.appointmentTime === bookingData.selectedTimeSlot || apt.time === bookingData.selectedTimeSlot
       const isPending = apt.status === 'pending' || apt.status === 'scheduled' || !apt.status
-      
+
       console.log('Checking appointment:', apt.patientName || apt.patient, '- Same date:', isSameDate, 'Same time:', isSameTime, 'Pending:', isPending)
-      
+
       return isSameDate && isSameTime && isPending
     })
 
     if (conflictingAppointment) {
       console.log('❌ CONFLICT FOUND with patient:', conflictingAppointment.patientName || conflictingAppointment.patient)
-      
+
       // Calculate alternative slots from all doctor's time slots
-      const alternativeSlots = allDoctorSlots.filter(slot => 
+      const alternativeSlots = allDoctorSlots.filter(slot =>
         !combinedAppointments.some(apt => {
           const isSameDate = apt.appointmentDate === bookingData.selectedDate || apt.date === bookingData.selectedDate
           const isSameTime = apt.appointmentTime === slot || apt.time === slot
@@ -408,7 +422,7 @@ export default function Doctors(){
           return isSameDate && isSameTime && isPending
         })
       )
-      
+
       setAvailabilityResult({
         available: false,
         reason: 'busy',
@@ -444,10 +458,10 @@ export default function Doctors(){
 
   const handleBookAppointment = (doctor) => {
     // Directly navigate to appointment page with doctor info
-    navigate('/appointment', { 
-      state: { 
+    navigate('/appointment', {
+      state: {
         selectedDoctor: doctor
-      } 
+      }
     })
   }
 
@@ -455,7 +469,7 @@ export default function Doctors(){
     if (e && e.preventDefault) {
       e.preventDefault()
     }
-    
+
     if (!bookingData.patientName || !bookingData.problem || !bookingData.preferredTime) {
       alert('Please fill in all fields and select a time slot')
       return
@@ -464,10 +478,10 @@ export default function Doctors(){
     // Add patient to doctor's patient list
     const allAppointments = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
     const doctorAppointments = allAppointments[selectedDoctor._id] || []
-    
+
     // Parse the preferred time to get date and time
     const appointmentDate = new Date().toISOString().split('T')[0] // Today's date
-    
+
     const newPatient = {
       id: Date.now(),
       patientName: bookingData.patientName,
@@ -477,7 +491,7 @@ export default function Doctors(){
       appointmentTime: bookingData.preferredTime,
       status: 'pending'
     }
-    
+
     doctorAppointments.push(newPatient)
     allAppointments[selectedDoctor._id] = doctorAppointments
     localStorage.setItem('doctorAppointments', JSON.stringify(allAppointments))
@@ -490,7 +504,7 @@ export default function Doctors(){
       timestamp: new Date().toISOString(),
       read: false
     }
-    
+
     // Dispatch custom event
     window.dispatchEvent(new CustomEvent('newNotification', { detail: notification }))
 
@@ -500,26 +514,26 @@ export default function Doctors(){
           `Problem: ${bookingData.problem}\n` +
           `Preferred Time: ${bookingData.preferredTime}\n\n` +
           `Proceeding to book your appointment...`)
-    
+
     // Navigate to appointment page with all details
-    navigate('/appointment', { 
-      state: { 
+    navigate('/appointment', {
+      state: {
         selectedDoctor: selectedDoctor,
         patientName: bookingData.patientName,
         problem: bookingData.problem,
         preferredTime: bookingData.preferredTime
-      } 
+      }
     })
   }
 
   const handleViewPatients = async (doctor) => {
     setSelectedDoctor(doctor)
-    
+
     // Try to fetch real appointments from database
     try {
       const response = await API.get('/appointments')
       const allAppointments = response.data
-      
+
       // Filter appointments for this doctor
       const doctorAppointments = allAppointments
         .filter(apt => {
@@ -537,7 +551,7 @@ export default function Doctors(){
           status: apt.status === 'completed' ? 'checked-up' : 'pending',
           checkedUpDate: apt.status === 'completed' ? apt.updatedAt : null
         }))
-      
+
       if (doctorAppointments.length > 0) {
         setPatientsList(doctorAppointments)
         setShowPatientList(true)
@@ -546,11 +560,11 @@ export default function Doctors(){
     } catch (error) {
       console.error('Error fetching appointments:', error)
     }
-    
+
     // Fall back to localStorage if API fails or no appointments found
     const allAppointments = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
     const doctorAppointments = allAppointments[doctor._id] || []
-    
+
     // If no appointments exist, create some sample data for demonstration
     if (doctorAppointments.length === 0) {
       const samplePatients = [
@@ -593,14 +607,14 @@ export default function Doctors(){
           status: 'pending'
         }
       ]
-      
+
       allAppointments[doctor._id] = samplePatients
       localStorage.setItem('doctorAppointments', JSON.stringify(allAppointments))
       setPatientsList(samplePatients)
     } else {
       setPatientsList(doctorAppointments)
     }
-    
+
     setShowPatientList(true)
   }
 
@@ -608,20 +622,20 @@ export default function Doctors(){
     const updatedPatients = patientsList.map(patient => {
       if (patient.id === patientId) {
         const newStatus = patient.status === 'pending' ? 'checked-up' : 'pending'
-        
+
         // If marking as checked-up, remove the related notification
         if (newStatus === 'checked-up') {
           const notifications = JSON.parse(localStorage.getItem('notifications') || '[]')
-          const updatedNotifications = notifications.filter(notif => 
-            !notif.message.includes(patient.patientName) || 
+          const updatedNotifications = notifications.filter(notif =>
+            !notif.message.includes(patient.patientName) ||
             !notif.message.includes(selectedDoctor.name)
           )
           localStorage.setItem('notifications', JSON.stringify(updatedNotifications))
-          
+
           // Dispatch event to update notification UI
           window.dispatchEvent(new CustomEvent('notificationRemoved'))
         }
-        
+
         return {
           ...patient,
           status: newStatus,
@@ -630,14 +644,14 @@ export default function Doctors(){
       }
       return patient
     })
-    
+
     setPatientsList(updatedPatients)
-    
+
     // Update localStorage
     const allAppointments = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
     allAppointments[selectedDoctor._id] = updatedPatients
     localStorage.setItem('doctorAppointments', JSON.stringify(allAppointments))
-    
+
     // Also update in database if appointmentId exists
     const patient = patientsList.find(p => p.id === patientId)
     if (patient && patient.appointmentId) {
@@ -704,23 +718,23 @@ export default function Doctors(){
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className='bg-gradient-to-br from-blue-600 to-cyan-600 rounded-3xl shadow-2xl p-8 mb-10 border-4 border-blue-400'
+          className='mb-10 rounded-3xl border-2 border-blue-200 bg-white p-6 shadow-[0_18px_45px_rgba(4,61,88,0.12)] sm:p-8'
         >
-          <div className='flex items-center justify-between gap-6 flex-wrap'>
-            <div className='flex items-center gap-4 flex-1'>
-              <div className='w-16 h-16 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-lg'>
+          <div className='flex flex-col items-stretch justify-between gap-6 lg:flex-row lg:items-center'>
+            <div className='flex min-w-0 items-start gap-4'>
+              <div className='flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-blue-50 shadow-sm'>
                 <Calendar className='w-9 h-9 text-blue-600' />
               </div>
-              <div className='text-white'>
-                <h3 className='text-2xl font-extrabold mb-1'>📅 Book an Appointment?</h3>
-                <p className='text-blue-100 text-lg font-medium'>
+              <div className='min-w-0'>
+                <h3 className='mb-2 text-3xl font-extrabold leading-tight text-[#043d58] sm:text-4xl'>Book an Appointment?</h3>
+                <p className='max-w-2xl text-base font-medium leading-relaxed text-slate-600 sm:text-lg'>
                   First check doctor availability to ensure your preferred time slot is open!
                 </p>
               </div>
             </div>
             <button
               onClick={() => navigate('/check-availability')}
-              className='px-8 py-4 bg-white text-blue-600 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:bg-blue-50 transition-all flex items-center gap-3'
+              className='flex w-full flex-shrink-0 items-center justify-center gap-3 rounded-xl bg-[#087bb8] px-6 py-4 text-base font-bold text-white shadow-lg shadow-blue-200 transition-all hover:-translate-y-1 hover:bg-[#066896] hover:shadow-xl sm:text-lg lg:w-auto'
             >
               <Calendar className='w-6 h-6' />
               Check Availability Now
@@ -732,10 +746,10 @@ export default function Doctors(){
               </motion.span>
             </button>
           </div>
-          <div className='mt-4 bg-white/10 rounded-xl p-4 backdrop-blur-sm'>
-            <p className='text-white/90 text-sm flex items-center gap-2'>
-              <CheckCircle className='w-5 h-5 text-green-300' />
-              <strong>Why check first?</strong> Avoid conflicts, see real-time status, get alternative slots if needed, and confirm before booking!
+          <div className='mt-6 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3'>
+            <p className='flex flex-wrap items-center gap-2 text-sm leading-relaxed text-slate-600 sm:text-base'>
+              <CheckCircle className='h-5 w-5 flex-shrink-0 text-blue-600' />
+              <strong className='text-[#043d58]'>Why check first?</strong> Avoid conflicts, see real-time status, get alternative slots if needed, and confirm before booking!
             </p>
           </div>
         </motion.div>
@@ -777,20 +791,21 @@ export default function Doctors(){
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1, duration: 0.5 }}
-                  className='bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 group hover:-translate-y-2'
+                  className='flex h-full flex-col overflow-hidden rounded-3xl border-2 border-gray-100 bg-white shadow-xl transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl'
                 >
                   {/* Doctor Image */}
-                  <div className='relative h-80 overflow-hidden'>
-                    <img 
-                      src={doctor.image} 
-                      alt={doctor.name} 
-                      className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500' 
+                  <div className='relative h-72 overflow-hidden sm:h-80'>
+                    <img
+                      src={doctor.image || getDoctorImageFallback(doctor.name)}
+                      alt={doctor.name}
+                      className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
                       onError={(e) => {
-                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}&size=500&background=0D8ABC&color=fff&bold=true`
+                        e.currentTarget.onerror = null
+                        e.currentTarget.src = getDoctorImageFallback(doctor.name)
                       }}
                     />
-                    <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent'></div>
-                    
+                    <div className='absolute inset-0 bg-gradient-to-t from-[#043d58]/90 via-[#043d58]/15 to-transparent'></div>
+
                     {/* Rating Badge */}
                     <div className='absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-3 py-2 rounded-xl shadow-lg flex items-center gap-1'>
                       <Star className='w-5 h-5 text-yellow-500 fill-yellow-500' />
@@ -803,19 +818,19 @@ export default function Doctors(){
                     </div>
 
                     {/* Name overlay */}
-                    <div className='absolute bottom-0 left-0 right-0 p-6 text-white'>
-                      <h3 className='text-3xl font-bold mb-1 drop-shadow-lg'>{doctor.name}</h3>
-                      <div className='flex items-center gap-2 text-cyan-300'>
-                        <Award className='w-5 h-5' />
-                        <span className='font-semibold text-lg'>{doctor.specialization || 'Medical Specialist'}</span>
+                    <div className='absolute bottom-0 left-0 right-0 bg-[#043d58]/95 px-5 py-4 text-white'>
+                      <h3 className='break-words text-2xl font-bold leading-tight text-white drop-shadow-lg sm:text-3xl'>{doctor.name}</h3>
+                      <div className='mt-2 flex items-center gap-2 text-[#8dcde5]'>
+                        <Award className='h-5 w-5 flex-shrink-0' />
+                        <span className='text-base font-semibold sm:text-lg'>{doctor.specialization || 'Medical Specialist'}</span>
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Doctor Info */}
-                  <div className='p-6 space-y-4'>
+                  <div className='flex flex-1 flex-col space-y-4 p-6'>
                     {/* Education & Certificate */}
-                    <div 
+                    <div
                       className='bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-4 border border-blue-100 cursor-pointer hover:shadow-md transition-all duration-300'
                       onClick={() => toggleEducation(doctor._id)}
                     >
@@ -827,7 +842,7 @@ export default function Doctors(){
                             <span className='text-xs text-gray-500'>{expandedEducation[doctor._id] ? '▲ Click to collapse' : '▼ Click to expand'}</span>
                           </div>
                           <p className='text-sm text-gray-700 font-medium leading-relaxed'>{doctor.education || 'Medical Degree'}</p>
-                          
+
                           {/* Expanded Education Details */}
                           {expandedEducation[doctor._id] && doctor.educationDetails && (
                             <motion.div
@@ -935,14 +950,14 @@ export default function Doctors(){
 
                     {/* Action Buttons */}
                     <div className='grid grid-cols-2 gap-3 pt-2'>
-                      <button 
+                      <button
                         onClick={() => handleCheckAvailability(doctor)}
                         className='flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 rounded-xl hover:from-blue-200 hover:to-cyan-200 transition-all font-bold text-sm border-2 border-blue-200 shadow-md'
                       >
                         <Clock className='w-4 h-4' />
                         Availability
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleBookAppointment(doctor)}
                         className='flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl hover:from-blue-700 hover:to-cyan-700 transition-all font-bold text-sm shadow-lg hover:shadow-xl'
                       >
@@ -950,9 +965,9 @@ export default function Doctors(){
                         Appoint
                       </button>
                     </div>
-                    
+
                     {/* View Patients Button */}
-                    <button 
+                    <button
                       onClick={() => handleViewPatients(doctor)}
                       className='w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 rounded-xl hover:from-indigo-200 hover:to-purple-200 transition-all font-bold text-sm border-2 border-indigo-200 shadow-md mt-2'
                     >
@@ -967,7 +982,7 @@ export default function Doctors(){
 
           {/* Stats Section */}
           {!loading && filteredDoctors.length > 0 && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
@@ -996,22 +1011,22 @@ export default function Doctors(){
         {/* Availability Modal */}
         {showAvailability && selectedDoctor && (
           <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className='bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto'
             >
               {/* Modal Header */}
               <div className='bg-gradient-to-r from-blue-600 to-cyan-600 text-white p-6 rounded-t-3xl relative'>
-                <button 
+                <button
                   onClick={() => setShowAvailability(false)}
                   className='absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition'
                 >
                   <X className='w-6 h-6' />
                 </button>
                 <div className='flex items-center gap-4'>
-                  <img 
-                    src={selectedDoctor.image} 
+                  <img
+                    src={selectedDoctor.image}
                     alt={selectedDoctor.name}
                     className='w-20 h-20 rounded-2xl object-cover border-4 border-white/30'
                     onError={(e) => {
@@ -1035,11 +1050,11 @@ export default function Doctors(){
                   </h3>
                   <div className='space-y-2 text-sm'>
                     <p className='text-gray-700'>
-                      <span className='font-semibold'>Patient Name:</span> 
+                      <span className='font-semibold'>Patient Name:</span>
                       <span className='ml-2 text-gray-900'>{bookingData.patientName || 'Not provided'}</span>
                     </p>
                     <p className='text-gray-700'>
-                      <span className='font-semibold'>Problem:</span> 
+                      <span className='font-semibold'>Problem:</span>
                       <span className='ml-2 text-gray-900'>{bookingData.problem || 'Not provided'}</span>
                     </p>
                   </div>
@@ -1124,22 +1139,22 @@ export default function Doctors(){
         {/* Booking Form Modal */}
         {showBookingForm && selectedDoctor && (
           <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className='bg-white rounded-3xl shadow-2xl max-w-2xl w-full'
             >
               {/* Modal Header */}
               <div className='bg-gradient-to-r from-green-600 to-emerald-600 text-white p-6 rounded-t-3xl relative'>
-                <button 
+                <button
                   onClick={() => setShowBookingForm(false)}
                   className='absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition'
                 >
                   <X className='w-6 h-6' />
                 </button>
                 <div className='flex items-center gap-4'>
-                  <img 
-                    src={selectedDoctor.image} 
+                  <img
+                    src={selectedDoctor.image}
                     alt={selectedDoctor.name}
                     className='w-20 h-20 rounded-2xl object-cover border-4 border-white/30'
                     onError={(e) => {
@@ -1253,8 +1268,8 @@ export default function Doctors(){
                   {/* Availability Result */}
                   {availabilityResult && (
                     <div className={`rounded-xl p-5 border-2 ${
-                      availabilityResult.available 
-                        ? 'bg-green-50 border-green-300' 
+                      availabilityResult.available
+                        ? 'bg-green-50 border-green-300'
                         : 'bg-red-50 border-red-300'
                     }`}>
                       <div className='flex items-start gap-3'>
@@ -1358,21 +1373,21 @@ export default function Doctors(){
                               appointmentTime: bookingData.selectedTimeSlot,
                               status: 'pending'
                             }
-                            
+
                             const allAppointments = JSON.parse(localStorage.getItem('doctorAppointments') || '{}')
                             const doctorAppointments = allAppointments[selectedDoctor._id] || []
                             doctorAppointments.push(newPatient)
                             allAppointments[selectedDoctor._id] = doctorAppointments
                             localStorage.setItem('doctorAppointments', JSON.stringify(allAppointments))
 
-                            navigate('/appointment', { 
-                              state: { 
+                            navigate('/appointment', {
+                              state: {
                                 selectedDoctor: selectedDoctor,
                                 patientName: bookingData.patientName,
                                 problem: bookingData.problem,
                                 appointmentDate: bookingData.selectedDate,
                                 appointmentTime: bookingData.selectedTimeSlot
-                              } 
+                              }
                             })
                           }}
                           className='w-full mt-4 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all font-bold shadow-lg'
@@ -1419,22 +1434,22 @@ export default function Doctors(){
         {/* Patient List Modal */}
         {showPatientList && selectedDoctor && (
           <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4'>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className='bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col'
             >
               {/* Modal Header */}
               <div className='bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-t-3xl relative flex-shrink-0'>
-                <button 
+                <button
                   onClick={() => setShowPatientList(false)}
                   className='absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition'
                 >
                   <X className='w-6 h-6' />
                 </button>
                 <div className='flex items-center gap-4'>
-                  <img 
-                    src={selectedDoctor.image} 
+                  <img
+                    src={selectedDoctor.image}
                     alt={selectedDoctor.name}
                     className='w-20 h-20 rounded-2xl object-cover border-4 border-white/30'
                     onError={(e) => {
@@ -1476,11 +1491,11 @@ export default function Doctors(){
 
                     {/* Patient Cards */}
                     {patientsList.map((patient) => (
-                      <div 
+                      <div
                         key={patient.id}
                         className={`border-2 rounded-2xl p-5 transition-all hover:shadow-lg ${
-                          patient.status === 'checked-up' 
-                            ? 'bg-green-50 border-green-300' 
+                          patient.status === 'checked-up'
+                            ? 'bg-green-50 border-green-300'
                             : 'bg-orange-50 border-orange-300'
                         }`}
                       >
@@ -1504,7 +1519,7 @@ export default function Doctors(){
                                   <p className='text-sm text-gray-800'>{patient.problem}</p>
                                 </div>
                               </div>
-                              
+
                               <div className='flex items-center gap-4 text-sm'>
                                 <div className='flex items-center gap-2'>
                                   <Calendar className='w-4 h-4 text-blue-600' />

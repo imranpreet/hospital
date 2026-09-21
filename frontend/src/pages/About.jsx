@@ -1,8 +1,8 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { 
-  Target, Eye, Award, Users, Heart, Clock, 
+import {
+  Target, Eye, Award, Users, Heart, Clock,
   Truck, Baby, Stethoscope, Brain, Activity,
   Phone, Mail, MapPin, ArrowRight, X, Calendar
 } from 'lucide-react'
@@ -10,7 +10,7 @@ import {
 export default function About(){
   const navigate = useNavigate()
   const [selectedService, setSelectedService] = React.useState(null)
-  
+
   const services = [
     {
       icon: Truck,
@@ -64,7 +64,7 @@ export default function About(){
   return (
     <div className='min-h-screen bg-white'>
       {/* Hero Section with Blue Background */}
-      <section className='relative bg-gradient-to-br from-blue-50 via-sky-50 to-cyan-50 overflow-hidden'>
+      <section className='relative bg-[#eef8fc] overflow-hidden'>
         <div className='max-w-7xl mx-auto px-4 py-16 lg:py-20'>
           <div className='grid lg:grid-cols-2 gap-12 items-center'>
             {/* Left Content */}
@@ -82,8 +82,8 @@ export default function About(){
                 and Wellness
               </h2>
               <p className='text-slate-600 text-lg mb-8 leading-relaxed max-w-xl'>
-                It is a long established fact that a reader will be distracted by the readable content of a 
-                page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less 
+                It is a long established fact that a reader will be distracted by the readable content of a
+                page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less
                 normal distribution of letters, as opposed to using.
               </p>
               <motion.button
@@ -108,10 +108,10 @@ export default function About(){
               <div className='absolute bottom-20 right-10 w-16 h-16 bg-cyan-400 rounded-full opacity-20'></div>
               <div className='absolute top-1/4 right-0 text-blue-400 text-6xl font-bold opacity-30'>+</div>
               <div className='absolute bottom-1/4 left-0 text-cyan-400 text-6xl font-bold opacity-30'>+</div>
-              
+
               {/* Doctor Image */}
               <div className='relative z-10'>
-                <img 
+                <img
                   src='https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600&h=700&fit=crop'
                   alt='Healthcare Professional'
                   className='rounded-3xl shadow-2xl w-full max-w-md mx-auto'
@@ -133,7 +133,7 @@ export default function About(){
           >
             <h2 className='text-4xl font-bold text-slate-800 mb-4'>Our Healthcare Service</h2>
             <p className='text-slate-600 max-w-2xl mx-auto'>
-              It is a long established fact that a reader will be distracted by the readable 
+              It is a long established fact that a reader will be distracted by the readable
               content of a page when looking at its layout.
             </p>
           </motion.div>
@@ -237,8 +237,8 @@ export default function About(){
                 <h2 className='text-2xl font-bold text-slate-900'>Our Vision</h2>
               </div>
               <p className='text-slate-700 leading-relaxed'>
-                To be the leading healthcare provider in the region, recognized for excellence in patient care, 
-                medical innovation, and community service. We strive to make quality healthcare accessible to 
+                To be the leading healthcare provider in the region, recognized for excellence in patient care,
+                medical innovation, and community service. We strive to make quality healthcare accessible to
                 everyone through technology and compassion.
               </p>
             </motion.div>
@@ -256,8 +256,8 @@ export default function About(){
                 <h2 className='text-2xl font-bold text-slate-900'>Our Mission</h2>
               </div>
               <p className='text-slate-700 leading-relaxed'>
-                To deliver exceptional healthcare services with dignity, respect, and compassion. We are committed 
-                to continuous improvement in medical practices, patient safety, and creating a healing environment 
+                To deliver exceptional healthcare services with dignity, respect, and compassion. We are committed
+                to continuous improvement in medical practices, patient safety, and creating a healing environment
                 for all who seek our care.
               </p>
             </motion.div>
@@ -351,7 +351,7 @@ export default function About(){
               className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group'
             >
               <div className='relative h-48 overflow-hidden'>
-                <img 
+                <img
                   src='https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=500&h=300&fit=crop'
                   alt='General Medicine'
                   className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
@@ -372,7 +372,7 @@ export default function About(){
                   </div>
                   <span className='text-sm text-slate-500'>+ 15 others</span>
                 </div>
-                <button 
+                <button
                   onClick={() => navigate('/department/general-medicine')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
@@ -390,7 +390,7 @@ export default function About(){
               className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group'
             >
               <div className='relative h-48 overflow-hidden'>
-                <img 
+                <img
                   src='https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?w=500&h=300&fit=crop'
                   alt='Cardiology'
                   className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
@@ -411,7 +411,7 @@ export default function About(){
                   </div>
                   <span className='text-sm text-slate-500'>+ 10 others</span>
                 </div>
-                <button 
+                <button
                   onClick={() => navigate('/department/cardiology')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
@@ -429,7 +429,7 @@ export default function About(){
               className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group'
             >
               <div className='relative h-48 overflow-hidden'>
-                <img 
+                <img
                   src='https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&h=300&fit=crop'
                   alt='Internal Medicine'
                   className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
@@ -449,7 +449,7 @@ export default function About(){
                   </div>
                   <span className='text-sm text-slate-500'>+ 12 others</span>
                 </div>
-                <button 
+                <button
                   onClick={() => navigate('/department/internal-medicine')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
@@ -467,7 +467,7 @@ export default function About(){
               className='bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all group'
             >
               <div className='relative h-48 overflow-hidden'>
-                <img 
+                <img
                   src='https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=500&h=300&fit=crop'
                   alt='Orthopedics'
                   className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
@@ -489,7 +489,7 @@ export default function About(){
                   </div>
                   <span className='text-sm text-slate-500'>+ 9 others</span>
                 </div>
-                <button 
+                <button
                   onClick={() => navigate('/department/orthopedics')}
                   className='w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-all'
                 >
@@ -502,7 +502,7 @@ export default function About(){
       </section>
 
       {/* Contact CTA Section */}
-      <section className='py-16 bg-gradient-to-br from-blue-600 to-cyan-600 text-white'>
+      <section className='py-16 bg-[#087bb8] text-white'>
         <div className='max-w-7xl mx-auto px-4 text-center'>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -514,14 +514,14 @@ export default function About(){
               Book an appointment with our expert doctors today and experience world-class healthcare
             </p>
             <div className='flex flex-wrap justify-center gap-4'>
-              <button 
+              <button
                 onClick={() => navigate('/appointment')}
                 className='px-8 py-4 bg-white text-blue-600 rounded-full font-semibold text-lg hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl flex items-center gap-2'
               >
                 Book Appointment
                 <ArrowRight className='w-5 h-5' />
               </button>
-              <button 
+              <button
                 onClick={() => navigate('/contact')}
                 className='px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold text-lg hover:bg-white/10 transition-all flex items-center gap-2'
               >
@@ -554,14 +554,14 @@ export default function About(){
               {/* Decorative Elements */}
               <div className='absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32'></div>
               <div className='absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-24 -mb-24'></div>
-              
+
               <button
                 onClick={() => setSelectedService(null)}
                 className='absolute top-6 right-6 w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all hover:rotate-90 duration-300 z-10'
               >
                 <X className='w-6 h-6' />
               </button>
-              
+
               <div className='relative z-10'>
                 <div className='flex items-center gap-6 mb-6'>
                   <div className='w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center shadow-lg'>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import API from '../api'
+import API, { API_BASE_URL } from '../api'
 import axios from 'axios'
 import { Home, LogOut, UserCircle, Stethoscope, Calendar, TrendingUp, TrendingDown, ChevronDown, Activity, Heart, Brain, Bone, Eye, Ear, FileSpreadsheet, MessageSquare } from 'lucide-react'
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, AreaChart, Area } from 'recharts'
@@ -54,7 +54,7 @@ export default function UserDashboard() {
   async function fetchContactStats() {
     try {
       const token = localStorage.getItem('token')
-      const response = await axios.get('http://localhost:5000/api/contact/stats', {
+      const response = await axios.get(`${API_BASE_URL}/contact/stats`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       if (response.data.success) {
@@ -154,10 +154,10 @@ export default function UserDashboard() {
 
   // Body structure health data with detailed information
   const bodyHealthData = [
-    { 
-      system: 'Cardio', 
-      score: 85, 
-      icon: Heart, 
+    {
+      system: 'Cardio',
+      score: 85,
+      icon: Heart,
       color: '#EF4444',
       fullName: 'Cardiovascular System',
       description: 'The cardiovascular system is responsible for pumping blood throughout the body, delivering oxygen and nutrients to tissues and organs. It includes the heart, blood vessels, and blood. Common conditions treated include heart disease, hypertension, arrhytias, and coronary artery disease. Our cardiology department provides comprehensive care including ECG monitoring, stress tests, and cardiac catheterization. Early detection and treatment are crucial for maintaining heart health and preventing serious complications.',
@@ -173,10 +173,10 @@ export default function UserDashboard() {
         critical: '12%'
       }
     },
-    { 
-      system: 'Neuro', 
-      score: 78, 
-      icon: Brain, 
+    {
+      system: 'Neuro',
+      score: 78,
+      icon: Brain,
       color: '#8B5CF6',
       fullName: 'Neurological System',
       description: 'The neurological system controls all body functions through the brain, spinal cord, and nerves. It processes sensory information, coordinates movement, and regulates vital functions. We treat conditions such as stroke, epilepsy, Parkinsons disease, multiple sclerosis, and migraines. Our neurology department uses advanced imaging technology including MRI and CT scans for accurate diagnosis. We provide both acute care for neurological emergencies and long-term management of chronic conditions with a multidisciplinary approach.',
@@ -192,10 +192,10 @@ export default function UserDashboard() {
         critical: '8%'
       }
     },
-    { 
-      system: 'Skeletal', 
-      score: 92, 
-      icon: Bone, 
+    {
+      system: 'Skeletal',
+      score: 92,
+      icon: Bone,
       color: '#F59E0B',
       fullName: 'Skeletal & Orthopedic System',
       description: 'The skeletal system provides structure, protects organs, produces blood cells, and enables movement. Our orthopedic department specializes in treating bones, joints, ligaments, tendons, and muscles. We handle fractures, arthritis, sports injuries, joint replacements, and spinal disorders. With state-of-the-art surgical facilities and rehabilitation programs, we achieve excellent recovery outcomes. Our team includes orthopedic surgeons, physiotherapists, and sports medicine specialists who work together to restore mobility and quality of life.',
@@ -211,10 +211,10 @@ export default function UserDashboard() {
         critical: '3%'
       }
     },
-    { 
-      system: 'Vision', 
-      score: 88, 
-      icon: Eye, 
+    {
+      system: 'Vision',
+      score: 88,
+      icon: Eye,
       color: '#3B82F6',
       fullName: 'Visual & Ophthalmic System',
       description: 'The visual system enables sight through complex interactions between the eyes and brain. Our ophthalmology department treats cataracts, glaucoma, diabetic retinopathy, macular degeneration, and refractive errors. We offer comprehensive eye examinations, laser surgery, cataract operations, and retinal treatments. Regular eye check-ups are essential for early detection of vision problems. Our advanced diagnostic equipment and experienced ophthalmologists ensure the best possible care for maintaining and restoring vision throughout all stages of life.',
@@ -230,10 +230,10 @@ export default function UserDashboard() {
         critical: '2%'
       }
     },
-    { 
-      system: 'Hearing', 
-      score: 90, 
-      icon: Ear, 
+    {
+      system: 'Hearing',
+      score: 90,
+      icon: Ear,
       color: '#10B981',
       fullName: 'Auditory & ENT System',
       description: 'The auditory system processes sound and maintains balance. Our ENT (Ear, Nose, and Throat) department treats hearing loss, ear infections, tinnitus, vertigo, and balance disorders. We also handle conditions affecting the nose, throat, and related structures including sinusitis, tonsillitis, and voice disorders. Using advanced audiological testing and treatment methods, we help patients maintain or restore their hearing and balance. Our services include hearing aid fittings, surgical interventions, and vestibular rehabilitation for comprehensive care.',
@@ -249,10 +249,10 @@ export default function UserDashboard() {
         critical: '1%'
       }
     },
-    { 
-      system: 'General', 
-      score: 87, 
-      icon: Activity, 
+    {
+      system: 'General',
+      score: 87,
+      icon: Activity,
       color: '#EC4899',
       fullName: 'General Health & Wellness',
       description: 'General health encompasses overall wellness, preventive care, and routine medical supervision. Our general medicine department provides comprehensive primary care including annual check-ups, chronic disease management, preventive screenings, and health education. We focus on maintaining health, detecting problems early, and managing conditions like diabetes, hypertension, and respiratory diseases. Regular health assessments help identify risk factors and prevent serious illness. Our approach emphasizes patient education, lifestyle modifications, and coordinated care for optimal health outcomes.',
@@ -297,7 +297,7 @@ export default function UserDashboard() {
     <div className='min-h-screen bg-gray-100'>
       {/* Navbar */}
       <Header />
-      
+
       <div className='flex'>
       {/* Sidebar */}
       <div className='w-16 bg-gray-800 flex flex-col items-center py-4 space-y-6'>
@@ -340,14 +340,21 @@ export default function UserDashboard() {
               <div className='text-xs text-white/80'>Today</div>
               <div className='text-sm font-bold text-white'>{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
             </div>
-            <button 
+            <button
               onClick={() => nav('/pharmacy')}
               className='px-4 py-2 bg-gradient-to-r from-sky-500 to-blue-500 text-white rounded-lg hover:from-sky-600 hover:to-blue-600 transition text-sm font-bold shadow-md flex items-center gap-2'
             >
               <MessageSquare className='w-4 h-4' />
               Pharmacy
             </button>
-            <button 
+            <button
+              onClick={() => nav('/help-desk')}
+              className='px-4 py-2 bg-gradient-to-r from-violet-500 to-purple-500 text-white rounded-lg hover:from-violet-600 hover:to-purple-600 transition text-sm font-bold shadow-md flex items-center gap-2'
+            >
+              <MessageSquare className='w-4 h-4' />
+              Help Desk
+            </button>
+            <button
               onClick={handleLogout}
               className='px-4 py-2 bg-white text-red-600 rounded-lg hover:bg-red-50 transition text-sm font-bold shadow-md flex items-center gap-2'
             >
@@ -387,7 +394,7 @@ export default function UserDashboard() {
               <div className='flex-1 min-w-[150px]'>
                 <label className='text-xs text-gray-600 mb-1 block'>Date Period</label>
                 <div className='relative'>
-                  <select 
+                  <select
                     value={selectedPeriod}
                     onChange={(e) => setSelectedPeriod(e.target.value)}
                     className='w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm appearance-none pr-8 cursor-pointer hover:border-blue-400 transition-colors'
@@ -411,7 +418,7 @@ export default function UserDashboard() {
               <div className='flex-1 min-w-[150px]'>
                 <label className='text-xs text-gray-600 mb-1 block'>Hospital County, Hospital Stat...</label>
                 <div className='relative'>
-                  <select 
+                  <select
                     value={selectedCounty}
                     onChange={(e) => setSelectedCounty(e.target.value)}
                     className='w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm appearance-none pr-8 cursor-pointer hover:border-blue-400 transition-colors'
@@ -433,7 +440,7 @@ export default function UserDashboard() {
               <div className='flex-1 min-w-[150px]'>
                 <label className='text-xs text-gray-600 mb-1 block'>Division, Department Name</label>
                 <div className='relative'>
-                  <select 
+                  <select
                     value={selectedDivision}
                     onChange={(e) => setSelectedDivision(e.target.value)}
                     className='w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm appearance-none pr-8 cursor-pointer hover:border-blue-400 transition-colors'
@@ -455,7 +462,7 @@ export default function UserDashboard() {
               <div className='flex-1 min-w-[150px]'>
                 <label className='text-xs text-gray-600 mb-1 block'>Physicians</label>
                 <div className='relative'>
-                  <select 
+                  <select
                     value={selectedPhysician}
                     onChange={(e) => setSelectedPhysician(e.target.value)}
                     className='w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm appearance-none pr-8 cursor-pointer hover:border-blue-400 transition-colors'
@@ -478,7 +485,7 @@ export default function UserDashboard() {
               <div className='flex-1 min-w-[150px]'>
                 <label className='text-xs text-gray-600 mb-1 block'>Patient Name</label>
                 <div className='relative'>
-                  <select 
+                  <select
                     value={selectedPatient}
                     onChange={(e) => setSelectedPatient(e.target.value)}
                     className='w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm appearance-none pr-8 cursor-pointer hover:border-blue-400 transition-colors'
@@ -500,7 +507,7 @@ export default function UserDashboard() {
               <div className='flex-1 min-w-[150px]'>
                 <label className='text-xs text-gray-600 mb-1 block'>Surgical Speciality, Surgical Ty...</label>
                 <div className='relative'>
-                  <select 
+                  <select
                     value={selectedSpecialty}
                     onChange={(e) => setSelectedSpecialty(e.target.value)}
                     className='w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm appearance-none pr-8 cursor-pointer hover:border-blue-400 transition-colors'
@@ -581,14 +588,14 @@ export default function UserDashboard() {
                   </h3>
                   <div className='text-xs text-gray-500'>Hover to see details</div>
                 </div>
-                
+
                 <div className='grid grid-cols-6 gap-4 relative'>
                   {bodyHealthData.map((system, idx) => {
                     const Icon = system.icon
                     const isHovered = hoveredSystem?.system === system.system
                     return (
-                      <div 
-                        key={idx} 
+                      <div
+                        key={idx}
                         className='relative'
                       >
                         <div
@@ -597,7 +604,7 @@ export default function UserDashboard() {
                           onMouseLeave={() => setHoveredSystem(null)}
                         >
                           <div className='flex flex-col items-center'>
-                            <div 
+                            <div
                               className='w-16 h-16 rounded-full flex items-center justify-center mb-3 shadow-lg transition-transform duration-300'
                               style={{ backgroundColor: `${system.color}20` }}
                             >
@@ -605,7 +612,7 @@ export default function UserDashboard() {
                             </div>
                             <div className='text-sm font-semibold text-gray-700 mb-2'>{system.system}</div>
                             <div className='w-full bg-gray-200 rounded-full h-2 mb-2'>
-                              <div 
+                              <div
                                 className='h-full rounded-full transition-all duration-500'
                                 style={{ width: `${system.score}%`, backgroundColor: system.color }}
                               ></div>
@@ -616,9 +623,9 @@ export default function UserDashboard() {
 
                         {/* Tooltip - positioned absolutely, shows below ALL cards */}
                         {isHovered && (
-                          <div 
+                          <div
                             className='absolute left-0 top-full mt-4 w-[550px] bg-white rounded-2xl shadow-2xl border-4 p-5 z-[100]'
-                            style={{ 
+                            style={{
                               borderColor: system.color,
                               transform: idx > 2 ? 'translateX(-60%)' : 'translateX(0)'
                             }}
@@ -626,10 +633,10 @@ export default function UserDashboard() {
                             onMouseLeave={() => setHoveredSystem(null)}
                           >
                             {/* Arrow pointer */}
-                            <div 
+                            <div
                               className='absolute -top-3 w-6 h-6 rotate-45 bg-white'
-                              style={{ 
-                                borderLeft: `4px solid ${system.color}`, 
+                              style={{
+                                borderLeft: `4px solid ${system.color}`,
                                 borderTop: `4px solid ${system.color}`,
                                 left: idx > 2 ? '60%' : '20px'
                               }}
@@ -637,12 +644,12 @@ export default function UserDashboard() {
 
                             {/* Header - Horizontal layout */}
                             <div className='flex items-center gap-6 mb-4 pb-3 border-b-2' style={{ borderColor: `${system.color}30` }}>
-                              <div 
+                              <div
                                 className='flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center shadow-lg'
                                 style={{ backgroundColor: `${system.color}20` }}
                               >
-                                <img 
-                                  src={system.image} 
+                                <img
+                                  src={system.image}
                                   alt={system.fullName}
                                   className='w-12 h-12 object-contain'
                                   onError={(e) => {
@@ -831,7 +838,7 @@ export default function UserDashboard() {
                                 <rect x='42' y='75' width='7' height='35' rx='3' fill={item.color} opacity='0.8' />
                                 <rect x='51' y='75' width='7' height='35' rx='3' fill={item.color} opacity='0.8' />
                               </svg>
-                              <div className='absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full' 
+                              <div className='absolute -bottom-4 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full'
                                    style={{ backgroundColor: item.color, opacity: 0.1, filter: 'blur(25px)' }}>
                               </div>
                             </div>
@@ -863,42 +870,42 @@ export default function UserDashboard() {
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray='3 3' stroke='#E5E7EB' />
-                        <XAxis 
-                          dataKey='month' 
-                          tick={{ fontSize: 11, fill: '#6B7280' }} 
+                        <XAxis
+                          dataKey='month'
+                          tick={{ fontSize: 11, fill: '#6B7280' }}
                           axisLine={{ stroke: '#E5E7EB' }}
                           tickLine={false}
                         />
-                        <YAxis 
-                          tick={{ fontSize: 11, fill: '#6B7280' }} 
+                        <YAxis
+                          tick={{ fontSize: 11, fill: '#6B7280' }}
                           axisLine={{ stroke: '#E5E7EB' }}
                           tickLine={false}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: '#FFF', 
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#FFF',
                             border: '1px solid #E5E7EB',
                             borderRadius: '8px',
                             fontSize: '12px'
                           }}
                         />
                         <Legend iconType='circle' wrapperStyle={{ fontSize: '12px' }} />
-                        <Area 
-                          type='monotone' 
-                          dataKey='patients' 
-                          stroke='#3B82F6' 
+                        <Area
+                          type='monotone'
+                          dataKey='patients'
+                          stroke='#3B82F6'
                           strokeWidth={3}
-                          fillOpacity={1} 
-                          fill='url(#colorPatients)' 
+                          fillOpacity={1}
+                          fill='url(#colorPatients)'
                           name='Total Patients'
                         />
-                        <Area 
-                          type='monotone' 
-                          dataKey='admitted' 
-                          stroke='#10B981' 
+                        <Area
+                          type='monotone'
+                          dataKey='admitted'
+                          stroke='#10B981'
                           strokeWidth={2}
-                          fillOpacity={1} 
-                          fill='url(#colorAdmitted)' 
+                          fillOpacity={1}
+                          fill='url(#colorAdmitted)'
                           name='Admitted'
                         />
                       </AreaChart>
@@ -920,30 +927,30 @@ export default function UserDashboard() {
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray='3 3' vertical={false} stroke='#E5E7EB' />
-                        <XAxis 
-                          dataKey='name' 
-                          tick={{ fontSize: 11, fill: '#6B7280' }} 
+                        <XAxis
+                          dataKey='name'
+                          tick={{ fontSize: 11, fill: '#6B7280' }}
                           axisLine={{ stroke: '#E5E7EB' }}
                           tickLine={false}
                         />
-                        <YAxis 
-                          tick={{ fontSize: 11, fill: '#6B7280' }} 
+                        <YAxis
+                          tick={{ fontSize: 11, fill: '#6B7280' }}
                           axisLine={{ stroke: '#E5E7EB' }}
                           tickLine={false}
                           domain={[0, 'dataMax + 50']}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: '#FFF', 
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#FFF',
                             border: '1px solid #E5E7EB',
                             borderRadius: '8px',
                             fontSize: '12px'
                           }}
                         />
-                        <Bar 
-                          dataKey='value' 
-                          fill='url(#barGradient)' 
-                          radius={[8, 8, 0, 0]} 
+                        <Bar
+                          dataKey='value'
+                          fill='url(#barGradient)'
+                          radius={[8, 8, 0, 0]}
                           maxBarSize={80}
                         />
                       </BarChart>
@@ -958,7 +965,7 @@ export default function UserDashboard() {
                         <div key={idx} className='flex items-center gap-3'>
                           <div className='w-16 text-xs text-gray-600 font-medium'>{item.range}</div>
                           <div className='flex-1 bg-gray-100 rounded-md h-7 relative overflow-hidden'>
-                            <div 
+                            <div
                               className={`h-full ${idx === 0 ? 'bg-gradient-to-r from-teal-600 to-teal-700' : 'bg-gray-400'} flex items-center justify-end pr-3 transition-all duration-500`}
                               style={{ width: `${item.count > 0 ? (item.count / item.max) * 100 : 0}%` }}
                             >
@@ -986,8 +993,8 @@ export default function UserDashboard() {
                             <div className='text-sm font-bold text-gray-800'>{item.value}%</div>
                           </div>
                           <div className='w-full bg-gray-100 rounded-full h-3 overflow-hidden'>
-                            <div 
-                              className='h-full rounded-full transition-all duration-500' 
+                            <div
+                              className='h-full rounded-full transition-all duration-500'
                               style={{ width: `${item.value}%`, backgroundColor: item.color }}
                             ></div>
                           </div>
@@ -1026,11 +1033,11 @@ export default function UserDashboard() {
                           <div className='text-xs text-gray-700 font-medium w-20 truncate'>{item.name}</div>
                           <div className='flex items-center gap-2 flex-1'>
                             <div className='flex-1 bg-gray-100 rounded-full h-3.5 overflow-hidden'>
-                              <div 
-                                className='h-full transition-all duration-500 rounded-full' 
-                                style={{ 
-                                  width: `${(item.value / divisionData[0].value) * 100}%`, 
-                                  backgroundColor: item.color 
+                              <div
+                                className='h-full transition-all duration-500 rounded-full'
+                                style={{
+                                  width: `${(item.value / divisionData[0].value) * 100}%`,
+                                  backgroundColor: item.color
                                 }}
                               ></div>
                             </div>
@@ -1059,11 +1066,11 @@ export default function UserDashboard() {
                             const x = cx + radius * Math.cos(-midAngle * RADIAN)
                             const y = cy + radius * Math.sin(-midAngle * RADIAN)
                             return (
-                              <text 
-                                x={x} 
-                                y={y} 
-                                fill={ageGroupData[index].color} 
-                                textAnchor={x > cx ? 'start' : 'end'} 
+                              <text
+                                x={x}
+                                y={y}
+                                fill={ageGroupData[index].color}
+                                textAnchor={x > cx ? 'start' : 'end'}
                                 dominantBaseline='central'
                                 className='text-xs font-semibold'
                               >
@@ -1077,9 +1084,9 @@ export default function UserDashboard() {
                             <Cell key={`cell-${index}`} fill={entry.color} stroke='#fff' strokeWidth={2} />
                           ))}
                         </Pie>
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: '#FFF', 
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#FFF',
                             border: '1px solid #E5E7EB',
                             borderRadius: '6px',
                             fontSize: '12px'
@@ -1093,46 +1100,46 @@ export default function UserDashboard() {
                   <div className='bg-white border border-gray-200 rounded-lg p-4 shadow-sm'>
                     <h3 className='text-sm font-bold text-gray-700 mb-3'>Avg Waiting Time by Division</h3>
                     <ResponsiveContainer width='100%' height={220}>
-                      <BarChart 
-                        data={waitingTimeData} 
-                        layout='horizontal' 
+                      <BarChart
+                        data={waitingTimeData}
+                        layout='horizontal'
                         margin={{ left: -10, right: 10, top: 5, bottom: 5 }}
                       >
                         <CartesianGrid strokeDasharray='3 3' horizontal={false} stroke='#E5E7EB' />
-                        <XAxis 
-                          type='number' 
-                          domain={[0, 100]} 
+                        <XAxis
+                          type='number'
+                          domain={[0, 100]}
                           tick={{ fontSize: 10, fill: '#6B7280' }}
                           axisLine={{ stroke: '#E5E7EB' }}
                           tickLine={false}
                         />
-                        <YAxis 
-                          dataKey='name' 
-                          type='category' 
-                          tick={{ fontSize: 9, fill: '#6B7280' }} 
+                        <YAxis
+                          dataKey='name'
+                          type='category'
+                          tick={{ fontSize: 9, fill: '#6B7280' }}
                           width={60}
                           axisLine={{ stroke: '#E5E7EB' }}
                           tickLine={false}
                         />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: '#FFF', 
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#FFF',
                             border: '1px solid #E5E7EB',
                             borderRadius: '6px',
                             fontSize: '11px'
                           }}
                           formatter={(value) => [`${value} min`, 'Avg Time']}
                         />
-                        <Bar 
-                          dataKey='value' 
-                          fill='#FFD700' 
+                        <Bar
+                          dataKey='value'
+                          fill='#FFD700'
                           radius={[0, 6, 6, 0]}
                           maxBarSize={18}
                         >
                           {waitingTimeData.map((entry, index) => (
-                            <Cell 
-                              key={`cell-${index}`} 
-                              fill={index === waitingTimeData.length - 1 ? '#FFA500' : '#FFD700'} 
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={index === waitingTimeData.length - 1 ? '#FFA500' : '#FFD700'}
                             />
                           ))}
                         </Bar>

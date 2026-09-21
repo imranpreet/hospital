@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { Heart, Activity, Users, Calendar, Pill, FileText, Clock, Shield, X, CheckCircle, ArrowRight } from 'lucide-react'
+import { Heart, Activity, Users, Calendar, Pill, FileText, Clock, Shield, X, CheckCircle, ArrowRight, Building2, Stethoscope, HeartPulse, ShieldCheck, Plus, ClipboardList } from 'lucide-react'
 
 export default function Home(){
   const navigate = useNavigate()
@@ -19,10 +19,30 @@ export default function Home(){
     }
   }
 
+  const sectionTitleClass = 'text-4xl md:text-5xl font-black tracking-[-0.04em] text-slate-900 mb-4 leading-tight'
+  const cardTitleClass = 'text-2xl md:text-3xl font-black tracking-[-0.03em] text-slate-900 mb-3 leading-tight'
+
+  const solutionCards = [
+    { icon: Building2, title: 'Hospital\nManagement' },
+    { icon: Stethoscope, title: 'Clinic\nManagement' },
+    { icon: ClipboardList, title: 'Multi-location\nManagement' },
+    { icon: HeartPulse, title: 'Pharmacy\nManagement' },
+    { icon: Pill, title: 'Stock\nManagement' },
+    { icon: Building2, title: 'Revenue &\nAnalysis' },
+    { icon: ShieldCheck, title: 'Telemedicine' },
+    { icon: Activity, title: 'Laboratory\nManagement' }
+  ]
+
+  const trustPoints = [
+    { title: 'Hospitals', desc: 'Complete HMS with integrated OPD, IPD, Lab, and Pharmacy Management' },
+    { title: 'Clinics & Healthcare Chains', desc: 'Centralized branch clinic management with unified patient records' },
+    { title: 'Solo Practitioners', desc: 'Simple EMR and appointment scheduling' }
+  ]
+
   const features = [
-    { 
-      icon: Calendar, 
-      title: 'Easy Appointment Booking', 
+    {
+      icon: Calendar,
+      title: 'Easy Appointment Booking',
       desc: 'Book appointments online 24/7 with your preferred doctor',
       detailedInfo: {
         overview: 'Our advanced appointment booking system makes scheduling healthcare visits effortless. Book appointments anytime, anywhere with just a few clicks.',
@@ -43,9 +63,9 @@ export default function Home(){
         ]
       }
     },
-    { 
-      icon: Users, 
-      title: 'Expert Doctors', 
+    {
+      icon: Users,
+      title: 'Expert Doctors',
       desc: '100+ specialized doctors across multiple departments',
       detailedInfo: {
         overview: 'Our hospital houses over 100 highly qualified and experienced doctors across 20+ medical specialties, ensuring comprehensive healthcare for all your needs.',
@@ -66,9 +86,9 @@ export default function Home(){
         ]
       }
     },
-    { 
-      icon: Activity, 
-      title: 'Health Records', 
+    {
+      icon: Activity,
+      title: 'Health Records',
       desc: 'Access your medical history and reports anytime, anywhere',
       detailedInfo: {
         overview: 'Keep all your medical records in one secure digital location. Access your complete health history, prescriptions, and test results from anywhere in the world.',
@@ -89,9 +109,9 @@ export default function Home(){
         ]
       }
     },
-    { 
-      icon: Pill, 
-      title: 'Online Pharmacy', 
+    {
+      icon: Pill,
+      title: 'Online Pharmacy',
       desc: 'Order medicines online with home delivery service',
       detailedInfo: {
         overview: 'Skip the pharmacy queue! Order all your prescribed and over-the-counter medicines online and get them delivered to your doorstep within hours.',
@@ -112,9 +132,9 @@ export default function Home(){
         ]
       }
     },
-    { 
-      icon: FileText, 
-      title: 'Lab Reports', 
+    {
+      icon: FileText,
+      title: 'Lab Reports',
       desc: 'Get your lab results digitally with easy download',
       detailedInfo: {
         overview: 'Access all your laboratory test results online as soon as they\'re ready. No more waiting in queues or losing paper reports.',
@@ -135,9 +155,9 @@ export default function Home(){
         ]
       }
     },
-    { 
-      icon: Shield, 
-      title: 'Secure & Private', 
+    {
+      icon: Shield,
+      title: 'Secure & Private',
       desc: 'Your health data is encrypted and completely confidential',
       detailedInfo: {
         overview: 'We take your privacy seriously. All your medical data is protected with bank-level encryption and complies with international healthcare data protection standards.',
@@ -158,9 +178,9 @@ export default function Home(){
         ]
       }
     },
-    { 
-      icon: Clock, 
-      title: '24/7 Emergency', 
+    {
+      icon: Clock,
+      title: '24/7 Emergency',
       desc: 'Round-the-clock emergency services with ambulance facility',
       detailedInfo: {
         overview: 'Medical emergencies don\'t wait for business hours. Our 24/7 emergency department is always ready with specialized trauma care and rapid response ambulance services.',
@@ -181,9 +201,9 @@ export default function Home(){
         ]
       }
     },
-    { 
-      icon: Heart, 
-      title: 'Patient Care', 
+    {
+      icon: Heart,
+      title: 'Patient Care',
       desc: 'Compassionate care with modern medical facilities',
       detailedInfo: {
         overview: 'Experience healthcare that combines cutting-edge medical technology with compassionate, patient-centered care. Your comfort and well-being are our top priorities.',
@@ -209,14 +229,14 @@ export default function Home(){
   return (
     <div>
       {/* Hero Section */}
-      <section className='relative bg-gradient-to-br from-sky-50 via-white to-blue-50 py-20 overflow-hidden'>
-        <div className='absolute inset-0 bg-[url("https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=1600")] bg-cover bg-center opacity-10'></div>
+      <section className='relative bg-[#eef8fc] py-20 overflow-hidden'>
+        <div className='absolute inset-0 bg-[url("https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=1600")] bg-cover bg-center'></div>
         <div className='max-w-6xl mx-auto px-4 relative z-10'>
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} 
-            animate={{ opacity: 1, y: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className='text-center'
+            className='text-center rounded-[2rem] bg-white/70 px-5 py-8 shadow-[0_18px_45px_rgba(15,23,42,0.12)] md:px-10'
           >
             <motion.div
               initial={{ scale: 0.9 }}
@@ -224,15 +244,15 @@ export default function Home(){
               transition={{ duration: 0.6 }}
               className='inline-block mb-4'
             >
-              <button 
+              <button
                 onClick={() => navigate('/patient-dashboard')}
-                className='px-4 py-2 bg-sky-100 text-sky-700 rounded-full text-sm font-medium hover:bg-sky-200 hover:scale-105 transition-all cursor-pointer'
+                className='inline-flex items-center justify-center rounded-xl bg-[#087bb8] px-6 py-3 text-base font-bold text-white shadow-[0_10px_24px_rgba(8,123,184,0.3)] transition-all hover:bg-[#066896] hover:scale-105 hover:shadow-xl cursor-pointer'
               >
                 Your Health, Our Priority →
               </button>
             </motion.div>
-            
-            <h1 className='text-5xl md:text-6xl font-bold text-slate-900 mb-6'>
+
+            <h1 className='text-5xl md:text-7xl font-black tracking-[-0.06em] text-slate-900 mb-6 leading-none'>
               Avoid Hassles & Delays
             </h1>
             <p className='text-xl text-slate-600 mb-4 max-w-2xl mx-auto'>
@@ -241,42 +261,42 @@ export default function Home(){
             <p className='text-lg text-slate-500 mb-8 max-w-xl mx-auto'>
               We offer you a free thought for finding the cure. Book your appointment now!
             </p>
-            
+
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleMakeAppointment}
-              className='px-8 py-4 bg-sky-600 text-white rounded-lg text-lg font-semibold hover:bg-sky-700 shadow-lg hover:shadow-xl transition-all'
+              className='px-8 py-4 bg-[#087bb8] text-white rounded-lg text-lg font-semibold hover:bg-[#066896] shadow-lg hover:shadow-xl transition-all'
             >
               Make Appointment
             </motion.button>
 
             <div className='mt-12 grid grid-cols-3 gap-8 max-w-3xl mx-auto'>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 className='text-center'
               >
-                <div className='text-4xl font-bold text-sky-600'>100+</div>
+                <div className='text-4xl font-bold text-[#087bb8]'>100+</div>
                 <div className='text-slate-600 mt-1'>Expert Doctors</div>
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
                 className='text-center'
               >
-                <div className='text-4xl font-bold text-sky-600'>10k+</div>
+                <div className='text-4xl font-bold text-[#087bb8]'>10k+</div>
                 <div className='text-slate-600 mt-1'>Happy Patients</div>
               </motion.div>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
                 className='text-center'
               >
-                <div className='text-4xl font-bold text-sky-600'>24/7</div>
+                <div className='text-4xl font-bold text-[#087bb8]'>24/7</div>
                 <div className='text-slate-600 mt-1'>Emergency Care</div>
               </motion.div>
             </div>
@@ -284,11 +304,90 @@ export default function Home(){
         </div>
       </section>
 
+      {/* Healthcare Solutions Section */}
+      <section className='py-20 bg-[#f4f7f9]'>
+        <div className='max-w-7xl mx-auto px-4'>
+          <div className='grid lg:grid-cols-[0.9fr_1.1fr] items-start gap-10 lg:gap-16'>
+            <div className='flex flex-col'>
+              <div className='text-[3.2rem] md:text-[4.8rem] leading-[0.9] font-black tracking-[-0.08em] text-[#087bb8]'>
+                <div>ONE</div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-[#087bb8]'>+</span>
+                  <span className='text-[#087bb8]'>STOP</span>
+                </div>
+              </div>
+
+              <div className='mt-5 pt-4 border-b border-sky-700/40'>
+                <span className='inline-block text-2xl md:text-3xl font-medium text-slate-700 tracking-[-0.04em]'>Healthcare Solutions</span>
+              </div>
+
+              <div className='mt-8 grid grid-cols-2 gap-4 max-w-[480px]'>
+                {solutionCards.slice(0, 4).map((card, idx) => {
+                  const Icon = card.icon
+                  return (
+                    <div
+                      key={idx}
+                      className='min-h-[146px] rounded-[1.6rem] border border-slate-200 bg-white shadow-[0_8px_20px_rgba(15,23,42,0.04)] flex flex-col items-center justify-center text-center p-4'
+                    >
+                      <div className='w-12 h-12 flex items-center justify-center text-[#087bb8] mb-3'>
+                        <Icon className='w-9 h-9 stroke-[1.7]' />
+                      </div>
+                      <div className='text-lg md:text-xl font-semibold text-slate-800 leading-snug whitespace-pre-line'>
+                        {card.title}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className='pt-1'>
+              <h2 className='text-4xl md:text-[4rem] font-black tracking-[-0.06em] text-slate-900 leading-[1.08]'>
+                Healthcare
+                <span className='block'>Software Built For</span>
+              </h2>
+
+              <div className='mt-10 space-y-8'>
+                {trustPoints.map((point, idx) => (
+                  <div key={idx} className='flex items-start gap-4'>
+                    <div className='mt-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#dff1f9] text-[#087bb8]'>
+                      <Plus className='w-4 h-4 stroke-[2.5]' />
+                    </div>
+                    <div>
+                      <div className='text-[1.8rem] md:text-[2.2rem] font-black tracking-[-0.05em] text-slate-900 leading-tight'>
+                        {point.title}
+                      </div>
+                      <p className='mt-2 text-lg md:text-xl text-slate-600 max-w-xl leading-relaxed'>
+                        {point.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className='py-20 bg-white'>
+        <div className='max-w-6xl mx-auto px-4 text-center'>
+          <h2 className='text-5xl md:text-[4rem] font-black tracking-[-0.06em] text-slate-900 leading-tight'>
+            Trusted By Healthcare Providers
+          </h2>
+          <h3 className='mt-2 text-5xl md:text-[4rem] font-black tracking-[-0.06em] text-[#087bb8] leading-tight'>
+            Worldwide
+          </h3>
+          <p className='mt-8 max-w-4xl mx-auto text-xl md:text-2xl text-slate-600 leading-relaxed'>
+            Leading healthcare providers rely on DocPulse Hospital Management Software to manage daily operations and patient care efficiently and maintain compliance.
+          </p>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className='py-16 bg-white'>
         <div className='max-w-6xl mx-auto px-4'>
           <div className='text-center mb-12'>
-            <h2 className='text-4xl font-bold text-slate-900 mb-4'>How Hospital Management Works</h2>
+            <h2 className={sectionTitleClass}>How Hospital Management Works</h2>
             <p className='text-lg text-slate-600 max-w-2xl mx-auto'>
               Our comprehensive system streamlines every aspect of healthcare management for patients, doctors, and administrators
             </p>
@@ -306,11 +405,11 @@ export default function Home(){
                 className='bg-gradient-to-br from-sky-50 to-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-all border border-sky-100 group hover:border-sky-300 cursor-pointer'
               >
                 <div className='w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-sky-600 transition-colors'>
-                  <feature.icon className='w-6 h-6 text-sky-600 group-hover:text-white transition-colors' />
+                  <feature.icon className='w-6 h-6 text-[#087bb8] group-hover:text-white transition-colors' />
                 </div>
                 <h3 className='text-lg font-semibold text-slate-900 mb-2'>{feature.title}</h3>
                 <p className='text-slate-600 text-sm'>{feature.desc}</p>
-                <div className='mt-3 text-sky-600 text-sm font-medium group-hover:text-sky-700 flex items-center gap-1'>
+                <div className='mt-3 text-[#087bb8] text-sm font-medium group-hover:text-[#066896] flex items-center gap-1'>
                   Learn more →
                 </div>
               </motion.div>
@@ -320,19 +419,19 @@ export default function Home(){
       </section>
 
       {/* Role Selection Section */}
-      <section className='relative py-20 overflow-hidden bg-gradient-to-br from-sky-400 via-blue-500 to-cyan-500'>
+      <section className='relative py-20 overflow-hidden bg-[#087bb8]'>
 
         <div className='relative z-10 max-w-6xl mx-auto px-4'>
           <div className='text-center mb-16'>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className='text-5xl font-bold text-white mb-4 drop-shadow-lg'
+              className='text-4xl md:text-5xl font-black tracking-[-0.04em] text-white mb-4 drop-shadow-lg leading-tight'
             >
               Access Your Portal
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -353,12 +452,12 @@ export default function Home(){
               className='group cursor-pointer'
             >
               <div className='bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 text-center border-2 border-transparent hover:border-sky-500'>
-                <div className='w-24 h-24 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
+                <div className='w-24 h-24 bg-[#087bb8] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
                   <Shield className='w-12 h-12 text-white' />
                 </div>
                 <h3 className='text-2xl font-bold text-slate-900 mb-3'>Admin</h3>
                 <p className='text-slate-600 mb-4'>Manage hospital operations, approve doctors, and view all records</p>
-                <div className='text-sky-600 font-semibold group-hover:text-sky-700'>Access Dashboard →</div>
+                <div className='text-[#087bb8] font-semibold group-hover:text-[#066896]'>Access Dashboard →</div>
               </div>
             </motion.div>
 
@@ -371,12 +470,12 @@ export default function Home(){
               className='group cursor-pointer'
             >
               <div className='bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 text-center border-2 border-transparent hover:border-green-500'>
-                <div className='w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
+                <div className='w-24 h-24 bg-[#087bb8] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
                   <Activity className='w-12 h-12 text-white' />
                 </div>
                 <h3 className='text-2xl font-bold text-slate-900 mb-3'>Doctor</h3>
                 <p className='text-slate-600 mb-4'>View appointments, manage patients, and update medical records</p>
-                <div className='text-green-600 font-semibold group-hover:text-green-700'>View Portal →</div>
+                <div className='text-[#087bb8] font-semibold group-hover:text-[#066896]'>View Portal →</div>
               </div>
             </motion.div>
 
@@ -398,12 +497,12 @@ export default function Home(){
               className='group cursor-pointer'
             >
               <div className='bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 text-center border-2 border-transparent hover:border-purple-500'>
-                <div className='w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
+                <div className='w-24 h-24 bg-[#087bb8] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform'>
                   <Users className='w-12 h-12 text-white' />
                 </div>
                 <h3 className='text-2xl font-bold text-slate-900 mb-3'>Patient</h3>
                 <p className='text-slate-600 mb-4'>Book appointments, view reports, and track medical history</p>
-                <div className='text-purple-600 font-semibold group-hover:text-purple-700'>Book Appointment →</div>
+                <div className='text-[#087bb8] font-semibold group-hover:text-[#066896]'>Book Appointment →</div>
               </div>
             </motion.div>
           </div>
@@ -414,25 +513,25 @@ export default function Home(){
       <section className='relative py-20 overflow-hidden'>
         {/* Background Image with Overlay */}
         <div className='absolute inset-0 z-0'>
-          <img 
-            src='https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=1920&h=800&fit=crop' 
+          <img
+            src='https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=1920&h=800&fit=crop'
             alt='Medical Background'
             className='w-full h-full object-cover'
           />
-          <div className='absolute inset-0 bg-gradient-to-br from-white/98 via-blue-50/95 to-cyan-50/98'></div>
+          <div className='absolute inset-0 bg-transparent'></div>
         </div>
 
         <div className='relative z-10 max-w-6xl mx-auto px-4'>
           <div className='text-center mb-16'>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className='text-5xl font-bold text-slate-900 mb-4'
+              className={sectionTitleClass}
             >
               Simple Steps to Get Started
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -495,18 +594,18 @@ export default function Home(){
       </section>
 
       {/* Statistics Section */}
-      <section className='py-20 bg-gradient-to-br from-blue-50 to-cyan-50'>
+      <section className='py-20 bg-[#eef8fc]'>
         <div className='max-w-6xl mx-auto px-4'>
           <div className='text-center mb-16'>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className='text-4xl font-bold text-slate-900 mb-4'
+              className={sectionTitleClass}
             >
               Our Achievements
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -535,7 +634,7 @@ export default function Home(){
                 <div className='w-16 h-16 bg-gradient-to-br from-sky-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4'>
                   <stat.icon className='w-8 h-8 text-white' />
                 </div>
-                <h3 className='text-4xl font-bold text-sky-600 mb-2'>{stat.number}</h3>
+                <h3 className='text-4xl font-bold text-[#087bb8] mb-2'>{stat.number}</h3>
                 <p className='text-slate-600 font-medium'>{stat.label}</p>
               </motion.div>
             ))}
@@ -547,15 +646,15 @@ export default function Home(){
       <section className='py-20 bg-white'>
         <div className='max-w-6xl mx-auto px-4'>
           <div className='text-center mb-16'>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className='text-4xl font-bold text-slate-900 mb-4'
+              className={sectionTitleClass}
             >
               Our Medical Departments
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -568,16 +667,16 @@ export default function Home(){
 
           <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
             {[
-              { 
-                name: 'General Medicine', 
+              {
+                name: 'General Medicine',
                 title: 'General Medicine',
-                icon: Activity, 
-                color: 'from-blue-500 to-blue-600', 
+                icon: Activity,
+                color: 'from-blue-500 to-blue-600',
                 desc: 'Comprehensive primary healthcare and chronic disease management',
                 detailedInfo: {
                   overview: 'Our General Medicine department provides comprehensive healthcare services for adults, focusing on prevention, diagnosis, and treatment of a wide range of medical conditions.',
                   services: [
-                    { 
+                    {
                       title: 'Preventive Health Check-ups',
                       desc: 'Annual physical examinations, health screenings, and vaccination programs',
                       image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=600&fit=crop&q=80'
@@ -600,11 +699,11 @@ export default function Home(){
                   ]
                 }
               },
-              { 
+              {
                 name: 'Cardiology',
                 title: 'Cardiology',
-                icon: Heart, 
-                color: 'from-red-500 to-pink-600', 
+                icon: Heart,
+                color: 'from-blue-500 to-blue-600',
                 desc: 'Advanced cardiac care and heart disease treatment',
                 detailedInfo: {
                   overview: 'Our Cardiology department specializes in the diagnosis and treatment of heart-related conditions with cutting-edge technology and experienced cardiologists.',
@@ -632,11 +731,11 @@ export default function Home(){
                   ]
                 }
               },
-              { 
+              {
                 name: 'Orthopedics',
                 title: 'Orthopedics',
-                icon: Activity, 
-                color: 'from-orange-500 to-red-600', 
+                icon: Activity,
+                color: 'from-blue-500 to-blue-600',
                 desc: 'Bone, joint, and musculoskeletal system care',
                 detailedInfo: {
                   overview: 'Specialized care for bone, joint, ligament, and muscle disorders with advanced surgical and non-surgical treatment options.',
@@ -664,11 +763,11 @@ export default function Home(){
                   ]
                 }
               },
-              { 
+              {
                 name: 'Pediatrics',
                 title: 'Pediatrics',
-                icon: Users, 
-                color: 'from-purple-500 to-pink-600', 
+                icon: Users,
+                color: 'from-blue-500 to-blue-600',
                 desc: 'Specialized healthcare for infants and children',
                 detailedInfo: {
                   overview: 'Dedicated pediatric care from newborns to adolescents with child-friendly environment and specialized pediatricians.',
@@ -696,11 +795,11 @@ export default function Home(){
                   ]
                 }
               },
-              { 
+              {
                 name: 'Gynecology',
                 title: 'Gynecology',
-                icon: Heart, 
-                color: 'from-pink-500 to-rose-600', 
+                icon: Heart,
+                color: 'from-blue-500 to-blue-600',
                 desc: 'Women\'s health and reproductive care',
                 detailedInfo: {
                   overview: 'Comprehensive women\'s healthcare services covering prenatal care, delivery, and gynecological treatments.',
@@ -728,11 +827,11 @@ export default function Home(){
                   ]
                 }
               },
-              { 
+              {
                 name: 'Emergency Care',
                 title: 'Emergency Care',
-                icon: Activity, 
-                color: 'from-red-600 to-orange-600', 
+                icon: Activity,
+                color: 'from-blue-500 to-blue-600',
                 desc: '24/7 emergency medical services',
                 detailedInfo: {
                   overview: 'Round-the-clock emergency services with advanced trauma care, ambulance services, and critical care facilities.',
@@ -775,7 +874,7 @@ export default function Home(){
                 </div>
                 <h3 className='text-xl font-bold text-slate-900 mb-2'>{dept.name}</h3>
                 <p className='text-slate-600 text-sm leading-relaxed mb-3'>{dept.desc}</p>
-                <div className='text-sky-600 font-semibold text-sm group-hover:text-sky-700 inline-flex items-center gap-1'>
+                <div className='text-[#087bb8] font-semibold text-sm group-hover:text-[#066896] inline-flex items-center gap-1'>
                   See Details →
                 </div>
               </motion.div>
@@ -797,18 +896,18 @@ export default function Home(){
       </section>
 
       {/* Why Choose Us */}
-      <section className='relative py-20 overflow-hidden bg-gradient-to-br from-sky-400 via-blue-500 to-cyan-500'>
+      <section className='relative py-20 overflow-hidden bg-[#087bb8]'>
         <div className='max-w-6xl mx-auto px-4'>
           <div className='text-center mb-16'>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className='text-4xl font-bold text-white mb-4'
+              className='text-4xl md:text-5xl font-black tracking-[-0.04em] text-white mb-4 leading-tight'
             >
               Why Choose Our Hospital?
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -860,7 +959,7 @@ export default function Home(){
                 transition={{ delay: idx * 0.1 }}
                 className='bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition flex gap-4'
               >
-                <div className='w-12 h-12 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0'>
+                <div className='w-12 h-12 bg-[#087bb8] rounded-xl flex items-center justify-center flex-shrink-0'>
                   <reason.icon className='w-6 h-6 text-white' />
                 </div>
                 <div>
@@ -877,26 +976,26 @@ export default function Home(){
       <section className='relative py-20 overflow-hidden'>
         {/* Background Image - Professional Hospital Theme - Clear and Sharp */}
         <div className='absolute inset-0 z-0'>
-          <img 
-            src='https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&h=1080&fit=crop&q=95' 
+          <img
+            src='https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&h=1080&fit=crop&q=95'
             alt='Hospital Management Background'
             className='w-full h-full object-cover'
           />
           {/* Minimal overlay for text readability */}
-          <div className='absolute inset-0 bg-white/40'></div>
+          <div className='absolute inset-0 bg-transparent'></div>
         </div>
 
         <div className='relative z-10 max-w-6xl mx-auto px-4'>
           <div className='text-center mb-16'>
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className='text-4xl font-bold text-slate-900 mb-4'
+              className={sectionTitleClass}
             >
               What Our Patients Say
             </motion.h2>
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -912,21 +1011,18 @@ export default function Home(){
               {
                 name: 'Sarah Johnson',
                 role: 'Patient',
-                rating: 5,
                 text: 'Excellent service! The doctors are very professional and caring. I received the best treatment for my condition. Highly recommended!',
                 image: '👩‍💼'
               },
               {
                 name: 'Michael Chen',
                 role: 'Patient',
-                rating: 5,
                 text: 'The online appointment system is so convenient. I was able to book my slot easily and the entire process was smooth and hassle-free.',
                 image: '👨‍💼'
               },
               {
                 name: 'Priya Sharma',
                 role: 'Patient',
-                rating: 5,
                 text: 'Amazing hospital with state-of-the-art facilities. The staff is friendly and the doctors take time to explain everything clearly.',
                 image: '👩‍⚕️'
               }
@@ -948,12 +1044,7 @@ export default function Home(){
                     <p className='text-sm text-slate-600'>{testimonial.role}</p>
                   </div>
                 </div>
-                <div className='flex gap-1 mb-4'>
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <span key={i} className='text-yellow-500 text-xl'>★</span>
-                  ))}
-                </div>
-                <p className='text-slate-700 italic leading-relaxed'>"{testimonial.text}"</p>
+                <p className='text-slate-700 leading-relaxed'>"{testimonial.text}"</p>
               </motion.div>
             ))}
           </div>
@@ -961,16 +1052,16 @@ export default function Home(){
       </section>
 
       {/* CTA Section */}
-      <section className='py-16 bg-gradient-to-r from-sky-600 to-blue-600'>
+      <section className='py-16 bg-[#087bb8]'>
         <div className='max-w-6xl mx-auto px-4 text-center text-white'>
-          <h2 className='text-3xl font-bold mb-4'>Need Emergency Medical Care?</h2>
+          <h2 className='text-3xl md:text-5xl font-black tracking-[-0.04em] mb-4 leading-tight'>Need Emergency Medical Care?</h2>
           <p className='text-xl mb-6 opacity-90'>We're available 24/7 for emergency services</p>
           <div className='flex gap-4 justify-center'>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleMakeAppointment}
-              className='px-8 py-3 bg-white text-sky-600 rounded-lg font-semibold hover:bg-gray-50 shadow-lg'
+              className='px-8 py-3 bg-white text-[#087bb8] rounded-lg font-semibold hover:bg-[#eef8fc] shadow-lg'
             >
               Book Appointment
             </motion.button>
@@ -978,7 +1069,7 @@ export default function Home(){
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/doctors')}
-              className='px-8 py-3 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-sky-600'
+              className='px-8 py-3 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-[#087bb8]'
             >
               View Doctors
             </motion.button>
@@ -998,7 +1089,7 @@ export default function Home(){
               onClick={() => setSelectedFeature(null)}
               className='fixed inset-0 bg-black/60 backdrop-blur-sm z-50'
             />
-            
+
             {/* Modal */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -1008,8 +1099,8 @@ export default function Home(){
               className='fixed inset-0 z-50 flex items-center justify-center p-4'
               onClick={() => setSelectedFeature(null)}
             >
-              <div 
-                onClick={(e) => e.stopPropagation()} 
+              <div
+                onClick={(e) => e.stopPropagation()}
                 className='bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden'
               >
                 {/* Modal Header */}
@@ -1066,8 +1157,8 @@ export default function Home(){
                               className='bg-gradient-to-br from-slate-50 to-blue-50 rounded-xl overflow-hidden border border-slate-200 hover:shadow-lg transition group'
                             >
                               <div className='relative h-48 overflow-hidden'>
-                                <img 
-                                  src={service.image} 
+                                <img
+                                  src={service.image}
                                   alt={service.title}
                                   className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
                                 />

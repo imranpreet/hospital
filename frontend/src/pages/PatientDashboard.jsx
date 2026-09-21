@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import API from '../api'
+import API, { API_BASE_URL } from '../api'
 import axios from 'axios'
-import { Users, Activity, Calendar, Home, LogOut, UserCircle, Stethoscope, Search, Clock, BookOpen, X, Pill, Package, TrendingUp, TrendingDown, Eye, AlertCircle, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Users, Activity, Calendar, Home, LogOut, UserCircle, Stethoscope, Search, Clock, BookOpen, X, Pill, Package, TrendingUp, TrendingDown, Eye, AlertCircle, Filter, ChevronLeft, ChevronRight, Upload, FileText, Download, Trash2, Image as ImageIcon } from 'lucide-react'
 import { BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import Header from '../components/Header'
 
@@ -22,6 +22,13 @@ export default function PatientDashboard() {
   const [userName, setUserName] = useState('Test Patient')
   const [viewMode, setViewMode] = useState(null) // 'doctors', 'patients', 'sessions', 'pharmacy'
   const [filteredDoctors, setFilteredDoctors] = useState([])
+  const [reports, setReports] = useState([])
+  const [reportType, setReportType] = useState('Lab Report')
+  const [reportDescription, setReportDescription] = useState('')
+  const [selectedReportFile, setSelectedReportFile] = useState(null)
+  const [uploadingReport, setUploadingReport] = useState(false)
+  const [reportStatus, setReportStatus] = useState('')
+  const [selectedPreview, setSelectedPreview] = useState(null)
   const nav = useNavigate()
 
   useEffect(() => {
@@ -32,7 +39,7 @@ export default function PatientDashboard() {
     }
     API.setToken(token)
     fetchData()
-    
+
     // Get user name from token if available
     try {
       const payload = JSON.parse(atob(token.split('.')[1]))
@@ -45,7 +52,7 @@ export default function PatientDashboard() {
   // Update filtered doctors when search changes
   useEffect(() => {
     if (searchQuery) {
-      const filtered = doctors.filter(d => 
+      const filtered = doctors.filter(d =>
         d.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         d.specialization?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         d.department?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -63,26 +70,84 @@ export default function PatientDashboard() {
         API.get('/doctors'),
         API.get('/patients'),
         API.get('/appointments'),
-        axios.get('http://localhost:5000/api/medicines/stats'),
-        axios.get(`http://localhost:5000/api/medicines?page=1&limit=${itemsPerPage}`)
+        axios.get(`${API_BASE_URL}/medicines/stats`),
+        axios.get(`${API_BASE_URL}/medicines?page=1&limit=${itemsPerPage}`)
       ])
 
       setStats(statsRes.data)
       setDoctors(doctorsRes.data)
       setPatients(patientsRes.data)
       setAppointments(appointmentsRes.data)
-      
+
       if (pharmacyStatsRes.data.success) {
         setPharmacyStats(pharmacyStatsRes.data.data)
       }
-      
+
       if (medicinesRes.data.success) {
         setMedicines(medicinesRes.data.data)
       }
     } catch (err) {
       console.error('Error fetching dashboard data:', err)
     }
+
+    try {
+      const reportsRes = await API.get('/reports')
+      setReports(reportsRes.data || [])
+    } catch (err) {
+      console.error('Error fetching reports:', err)
+    }
+
     setLoading(false)
+  }
+
+  async function handleReportUpload(e) {
+    e.preventDefault()
+
+    if (!selectedReportFile) {
+      setReportStatus('Please select a file before uploading.')
+      return
+    }
+
+    const token = localStorage.getItem('token')
+    const payload = token ? JSON.parse(atob(token.split('.')[1])) : {}
+
+    try {
+      setUploadingReport(true)
+      setReportStatus('')
+
+      const formData = new FormData()
+      formData.append('file', selectedReportFile)
+      formData.append('type', reportType)
+      formData.append('description', reportDescription)
+      formData.append('patientId', payload.id || '')
+
+      const uploadRes = await API.post('/reports/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+
+      setReports(prev => [uploadRes.data, ...prev])
+      setSelectedReportFile(null)
+      setReportDescription('')
+      setReportType('Lab Report')
+      setReportStatus('Medical report uploaded successfully.')
+    } catch (err) {
+      console.error(err)
+      setReportStatus(err.response?.data?.msg || 'Upload failed. Please try again.')
+    } finally {
+      setUploadingReport(false)
+    }
+  }
+
+  async function handleDeleteReport(reportId) {
+    try {
+      await API.delete(`/reports/${reportId}`)
+      setReports(prev => prev.filter(item => item._id !== reportId))
+      if (selectedPreview && selectedPreview._id === reportId) {
+        setSelectedPreview(null)
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   function handleLogout() {
@@ -142,13 +207,13 @@ export default function PatientDashboard() {
           <div className='bg-gradient-to-r from-cyan-50 to-blue-50 rounded-2xl p-8 mb-8 relative overflow-hidden shadow-lg'>
             {/* Background Image - Medical Team */}
             <div className='absolute right-0 top-0 w-96 h-full'>
-              <img 
-                src='https://img.freepik.com/free-photo/pleased-young-female-doctor-wearing-medical-robe-stethoscope-around-neck-standing-with-closed-posture_409827-254.jpg' 
-                alt='Medical Team' 
+              <img
+                src='https://img.freepik.com/free-photo/pleased-young-female-doctor-wearing-medical-robe-stethoscope-around-neck-standing-with-closed-posture_409827-254.jpg'
+                alt='Medical Team'
                 className='w-full h-full object-cover rounded-r-2xl opacity-30'
               />
             </div>
-            
+
             <div className='relative z-10'>
               <p className='text-xl text-slate-700 mb-2 font-semibold'>Welcome!</p>
               <h2 className='text-4xl font-bold text-slate-900 mb-4'>{userName}.</h2>
@@ -177,7 +242,7 @@ export default function PatientDashboard() {
                     onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                     className='w-full pl-12 pr-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent'
                   />
-                  
+
                   {/* Search Results Dropdown */}
                   {searchQuery && filteredDoctors.length > 0 && (
                     <div className='absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-slate-200 max-h-80 overflow-y-auto z-20'>
@@ -207,7 +272,7 @@ export default function PatientDashboard() {
                       </div>
                     </div>
                   )}
-                  
+
                   {searchQuery && filteredDoctors.length === 0 && (
                     <div className='absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-slate-200 p-4 z-20'>
                       <p className='text-slate-600 text-center'>No doctors found matching "{searchQuery}"</p>
@@ -232,7 +297,7 @@ export default function PatientDashboard() {
             <h3 className='text-2xl font-bold text-slate-800 mb-6'>Status</h3>
             <div className='grid grid-cols-2 gap-4'>
               {/* All Doctors - Clickable */}
-              <div 
+              <div
                 onClick={() => nav('/doctors')}
                 className='bg-white rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer group'
               >
@@ -246,7 +311,7 @@ export default function PatientDashboard() {
               </div>
 
               {/* All Patients - Clickable */}
-              <div 
+              <div
                 onClick={() => setViewMode('patients')}
                 className='bg-white rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer group'
               >
@@ -260,7 +325,7 @@ export default function PatientDashboard() {
               </div>
 
               {/* New Booking - Clickable */}
-              <div 
+              <div
                 onClick={() => nav('/appointment')}
                 className='bg-white rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer group'
               >
@@ -274,7 +339,7 @@ export default function PatientDashboard() {
               </div>
 
               {/* Today Sessions - Clickable */}
-              <div 
+              <div
                 onClick={() => setViewMode('sessions')}
                 className='bg-white rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer group'
               >
@@ -292,7 +357,7 @@ export default function PatientDashboard() {
 
             {/* Pharmacy Button - Added Below */}
             <div className='mt-6'>
-              <div 
+              <div
                 onClick={() => setViewMode('pharmacy')}
                 className='bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 shadow-lg hover:shadow-xl hover:scale-105 transition-all cursor-pointer text-white'
               >
@@ -347,6 +412,180 @@ export default function PatientDashboard() {
             </div>
           </div>
         </div>
+
+        <div className='mt-8'>
+          <div className='bg-white rounded-2xl shadow-lg border border-slate-200 p-6'>
+            <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6'>
+              <div>
+                <p className='text-sm font-semibold uppercase tracking-[0.2em] text-sky-600'>Medical Records</p>
+                <h3 className='text-2xl font-bold text-slate-900'>My Reports & Documents</h3>
+              </div>
+              <div className='flex items-center gap-2 text-sm text-slate-600'>
+                <FileText className='w-4 h-4' />
+                {reports.length} uploaded
+              </div>
+            </div>
+
+            <div className='grid grid-cols-1 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-6'>
+              <form onSubmit={handleReportUpload} className='rounded-2xl border border-sky-100 bg-sky-50 p-5'>
+                <div className='flex items-center gap-3 mb-4'>
+                  <div className='bg-sky-600 rounded-xl p-2 text-white'>
+                    <Upload className='w-5 h-5' />
+                  </div>
+                  <h4 className='text-lg font-bold text-slate-900'>Upload a report</h4>
+                </div>
+
+                <div className='space-y-4'>
+                  <div>
+                    <label className='block text-sm font-semibold text-slate-700 mb-2'>Report type</label>
+                    <select
+                      value={reportType}
+                      onChange={(e) => setReportType(e.target.value)}
+                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-transparent bg-white'
+                    >
+                      <option>Lab Report</option>
+                      <option>Prescription</option>
+                      <option>Discharge Summary</option>
+                      <option>Scan / X-Ray</option>
+                      <option>Medical Note</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className='block text-sm font-semibold text-slate-700 mb-2'>Description</label>
+                    <textarea
+                      value={reportDescription}
+                      onChange={(e) => setReportDescription(e.target.value)}
+                      rows='3'
+                      placeholder='Add short notes about this report'
+                      className='w-full px-3 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-sky-500 focus:border-transparent resize-none'
+                    />
+                  </div>
+
+                  <div>
+                    <label className='block text-sm font-semibold text-slate-700 mb-2'>Choose file</label>
+                    <input
+                      type='file'
+                      onChange={(e) => setSelectedReportFile(e.target.files?.[0] || null)}
+                      className='block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-sky-600 file:text-white file:font-semibold hover:file:bg-sky-700'
+                    />
+                  </div>
+
+                  {reportStatus && (
+                    <div className='rounded-xl border border-sky-200 bg-white px-3 py-2 text-sm text-slate-700'>
+                      {reportStatus}
+                    </div>
+                  )}
+
+                  <button
+                    type='submit'
+                    disabled={uploadingReport}
+                    className='w-full flex items-center justify-center gap-2 bg-sky-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-sky-700 transition disabled:opacity-50'
+                  >
+                    <Upload className='w-4 h-4' />
+                    {uploadingReport ? 'Uploading...' : 'Upload report'}
+                  </button>
+                </div>
+              </form>
+
+              <div className='rounded-2xl border border-slate-200 bg-slate-50 p-5'>
+                <div className='flex items-center justify-between mb-4'>
+                  <h4 className='text-lg font-bold text-slate-900'>Recent reports</h4>
+                  <span className='text-xs uppercase tracking-[0.2em] text-slate-500'>History</span>
+                </div>
+
+                <div className='space-y-3 max-h-[420px] overflow-y-auto'>
+                  {reports.length === 0 ? (
+                    <div className='rounded-xl border border-dashed border-slate-300 bg-white p-6 text-center text-slate-500'>
+                      No reports uploaded yet.
+                    </div>
+                  ) : (
+                    reports.map((report) => (
+                      <div key={report._id} className='rounded-xl border border-slate-200 bg-white p-3 shadow-sm'>
+                        <div className='flex items-start justify-between gap-3'>
+                          <div className='flex items-start gap-3 min-w-0'>
+                            <div className='bg-sky-100 rounded-lg p-2 text-sky-700'>
+                              <FileText className='w-4 h-4' />
+                            </div>
+                            <div className='min-w-0'>
+                              <div className='font-semibold text-slate-900 truncate'>{report.originalName || report.fileName || report.type}</div>
+                              <div className='text-xs text-slate-500'>{report.type}</div>
+                              <div className='text-xs text-slate-400 mt-1'>
+                                {new Date(report.uploadedDate || report.createdAt).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className='flex items-center gap-2'>
+                            <button
+                              type='button'
+                              onClick={() => setSelectedPreview(report)}
+                              className='p-2 rounded-lg bg-sky-100 text-sky-700 hover:bg-sky-200 transition'
+                              title='Preview'
+                            >
+                              <Eye className='w-4 h-4' />
+                            </button>
+                            <a
+                              href={report.fileURL}
+                              target='_blank'
+                              rel='noreferrer'
+                              className='p-2 rounded-lg bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition'
+                              title='Open'
+                            >
+                              <Download className='w-4 h-4' />
+                            </a>
+                            <button
+                              type='button'
+                              onClick={() => handleDeleteReport(report._id)}
+                              className='p-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200 transition'
+                              title='Delete'
+                            >
+                              <Trash2 className='w-4 h-4' />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {selectedPreview && (
+          <div className='fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4' onClick={() => setSelectedPreview(null)}>
+            <div className='bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden' onClick={(e) => e.stopPropagation()}>
+              <div className='flex items-center justify-between p-4 border-b border-slate-200'>
+                <div>
+                  <h4 className='font-bold text-slate-900'>{selectedPreview.originalName || selectedPreview.fileName || selectedPreview.type}</h4>
+                  <p className='text-sm text-slate-500'>{selectedPreview.type}</p>
+                </div>
+                <button onClick={() => setSelectedPreview(null)} className='p-2 rounded-lg hover:bg-slate-100'>
+                  <X className='w-5 h-5 text-slate-600' />
+                </button>
+              </div>
+
+              <div className='p-4 overflow-auto max-h-[70vh] bg-slate-50'>
+                {selectedPreview.mimeType?.startsWith('image/') || selectedPreview.fileURL?.match(/\.(png|jpg|jpeg|webp|gif)$/i) ? (
+                  <img src={selectedPreview.fileURL} alt={selectedPreview.fileName || 'Report preview'} className='max-h-[60vh] mx-auto rounded-xl border border-slate-200' />
+                ) : selectedPreview.mimeType === 'application/pdf' || selectedPreview.fileURL?.match(/\.pdf$/i) ? (
+                  <iframe src={selectedPreview.fileURL} title='PDF Preview' className='w-full h-[60vh] rounded-xl border border-slate-200' />
+                ) : (
+                  <div className='space-y-3'>
+                    <div className='flex items-center gap-2 text-slate-700'>
+                      <ImageIcon className='w-5 h-5 text-sky-600' />
+                      File preview is not available for this type.
+                    </div>
+                    <a href={selectedPreview.fileURL} target='_blank' rel='noreferrer' className='inline-flex items-center gap-2 bg-sky-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-sky-700'>
+                      <Download className='w-4 h-4' /> Open file
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Modals for Viewing Details */}
         {/* Patients Modal */}
@@ -472,7 +711,7 @@ export default function PatientDashboard() {
                 </select>
                 <div className='flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-lg'>
                   <Package className='w-5 h-5 text-green-600' />
-                  <span className='font-semibold text-slate-800'>{medicines.filter(m => 
+                  <span className='font-semibold text-slate-800'>{medicines.filter(m =>
                     (filterCategory === 'all' || m.category === filterCategory) &&
                     (!medicineSearch || m.name.toLowerCase().includes(medicineSearch.toLowerCase()))
                   ).length} items</span>
@@ -494,7 +733,7 @@ export default function PatientDashboard() {
                   </thead>
                   <tbody>
                     {medicines
-                      .filter(m => 
+                      .filter(m =>
                         (filterCategory === 'all' || m.category === filterCategory) &&
                         (!medicineSearch || m.name.toLowerCase().includes(medicineSearch.toLowerCase()))
                       )
@@ -507,7 +746,7 @@ export default function PatientDashboard() {
                       </tr>
                     ) : (
                       medicines
-                        .filter(m => 
+                        .filter(m =>
                           (filterCategory === 'all' || m.category === filterCategory) &&
                           (!medicineSearch || m.name.toLowerCase().includes(medicineSearch.toLowerCase()))
                         )
@@ -571,7 +810,7 @@ export default function PatientDashboard() {
               <div className='bg-slate-50 p-4 border-t border-slate-200'>
                 <div className='flex items-center justify-between text-sm'>
                   <p className='text-slate-600'>
-                    Showing {medicines.filter(m => 
+                    Showing {medicines.filter(m =>
                       (filterCategory === 'all' || m.category === filterCategory) &&
                       (!medicineSearch || m.name.toLowerCase().includes(medicineSearch.toLowerCase()))
                     ).length} of {medicines.length} medicines

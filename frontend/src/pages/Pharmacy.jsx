@@ -15,6 +15,7 @@ import {
 import axios from 'axios'
 import Header from '../components/Header'
 import BillingModal from '../components/BillingModal'
+import { API_BASE_URL } from '../api'
 
 export default function Pharmacy() {
   const nav = useNavigate()
@@ -71,8 +72,8 @@ export default function Pharmacy() {
   const fetchAlerts = async () => {
     try {
       const [lowStockRes, expiringRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/medicines/low-stock'),
-        axios.get('http://localhost:5000/api/medicines/expiring-soon')
+        axios.get(`${API_BASE_URL}/medicines/low-stock`),
+        axios.get(`${API_BASE_URL}/medicines/expiring-soon`)
       ])
       
       if (lowStockRes.data.success) setLowStockAlert(lowStockRes.data.data)
@@ -94,7 +95,7 @@ export default function Pharmacy() {
       if (filterStatus !== 'all') params.append('status', filterStatus)
       if (searchTerm) params.append('search', searchTerm)
       
-      const response = await axios.get(`http://localhost:5000/api/medicines?${params}`)
+      const response = await axios.get(`${API_BASE_URL}/medicines?${params}`)
       if (response.data.success) {
         setMedicines(response.data.data)
         // Set pagination data from backend response
@@ -112,7 +113,7 @@ export default function Pharmacy() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/medicines/stats')
+      const response = await axios.get(`${API_BASE_URL}/medicines/stats`)
       if (response.data.success) {
         setStats(response.data.data)
       }
@@ -142,7 +143,7 @@ export default function Pharmacy() {
     }
     
     try {
-      const response = await axios.post('http://localhost:5000/api/medicines', formData)
+      const response = await axios.post(`${API_BASE_URL}/medicines`, formData)
       if (response.data.success) {
         alert('✅ Medicine added successfully!')
         setShowAddModal(false)
@@ -161,7 +162,7 @@ export default function Pharmacy() {
   const handleUpdateMedicine = async (e) => {
     e.preventDefault()
     try {
-      const response = await axios.put(`http://localhost:5000/api/medicines/${selectedMedicine._id}`, formData)
+      const response = await axios.put(`${API_BASE_URL}/medicines/${selectedMedicine._id}`, formData)
       if (response.data.success) {
         alert('✅ Medicine updated successfully!')
         setShowEditModal(false)
@@ -181,7 +182,7 @@ export default function Pharmacy() {
     if (!window.confirm('Are you sure you want to delete this medicine?')) return
     
     try {
-      const response = await axios.delete(`http://localhost:5000/api/medicines/${id}`)
+      const response = await axios.delete(`${API_BASE_URL}/medicines/${id}`)
       if (response.data.success) {
         alert('✅ Medicine deleted successfully!')
         // Refresh the medicines list and stats

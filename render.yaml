@@ -19,6 +19,10 @@ services:
         sync: false
       - key: SMTP_PASS
         sync: false
+      - key: FRONTEND_URL
+        value: https://hospitalmanagement-frontend-sh3z.onrender.com
+      - key: BACKEND_URL
+        value: https://hospitalmanagement-backend-0g6l.onrender.com
 
   # Frontend Static Site
   - type: web
@@ -29,5 +33,5 @@ services:
     publishDir: dist
     envVars:
       - key: VITE_API_URL
-        value: https://hospital-backend.onrender.com/api
+        value: https://hospitalmanagement-backend-0g6l.onrender.com/api
 
