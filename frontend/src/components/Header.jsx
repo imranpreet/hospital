@@ -8,6 +8,7 @@ export default function Header(){
   const [userRole, setUserRole] = React.useState(localStorage.getItem('userRole'))
   const [notifications, setNotifications] = React.useState([])
   const [showNotifications, setShowNotifications] = React.useState(false)
+  const [showMobileMenu, setShowMobileMenu] = React.useState(false)
   const [unreadCount, setUnreadCount] = React.useState(0)
 
   // Load notifications from localStorage on mount
@@ -46,8 +47,11 @@ export default function Header(){
     localStorage.removeItem('userRole')
     setToken(null)
     setUserRole(null)
+    setShowMobileMenu(false)
     navigate('/')
   }
+
+  const closeMobileMenu = () => setShowMobileMenu(false)
 
   const markAsRead = (notificationId) => {
     const updatedNotifications = notifications.map(n =>
@@ -195,10 +199,64 @@ export default function Header(){
           )}
         </nav>
 
-        <button className='md:hidden'>
-          <Menu className='w-6 h-6 text-slate-600' />
+        <button
+          type='button'
+          aria-label={showMobileMenu ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={showMobileMenu}
+          onClick={() => setShowMobileMenu(prev => !prev)}
+          className='rounded-lg p-2 text-slate-600 hover:bg-slate-100 hover:text-[#087bb8] md:hidden'
+        >
+          {showMobileMenu ? <X className='w-6 h-6' /> : <Menu className='w-6 h-6' />}
         </button>
       </div>
+
+      {showMobileMenu && (
+        <div className='border-t border-slate-100 bg-white px-4 pb-4 pt-2 shadow-lg md:hidden'>
+          <nav className='flex flex-col gap-1' aria-label='Mobile navigation'>
+            {[
+              ['Home', '/'],
+              ['About', '/about'],
+              ['Doctors', '/doctors'],
+              ['Appointments', '/appointment'],
+              ...(!token ? [['Admin', '/admin-login']] : []),
+              ...(token ? [[userRole === 'admin' ? 'Dashboard' : 'Dashboard', userRole === 'admin' ? '/dashboard' : '/user-dashboard']] : []),
+              ...(token && userRole === 'admin' ? [['Team Desk', '/staff-collaboration']] : [])
+            ].map(([label, path]) => (
+              <Link
+                key={path}
+                to={path}
+                onClick={closeMobileMenu}
+                className='rounded-lg px-3 py-3 font-medium text-slate-700 hover:bg-[#eef8fc] hover:text-[#087bb8]'
+              >
+                {label}
+              </Link>
+            ))}
+
+            <button
+              type='button'
+              onClick={() => {
+                if (token) handleLogout()
+                else closeMobileMenu()
+              }}
+              className={token
+                ? 'mt-1 rounded-lg bg-red-50 px-3 py-3 text-left font-medium text-red-600 hover:bg-red-100'
+                : 'rounded-lg bg-[#087bb8] px-3 py-3 text-left font-medium text-white hover:bg-[#066896]'}
+            >
+              {token ? 'Logout' : 'Login'}
+            </button>
+
+            {!token && (
+              <Link
+                to='/register'
+                onClick={closeMobileMenu}
+                className='rounded-lg bg-[#087bb8] px-3 py-3 font-medium text-white hover:bg-[#066896]'
+              >
+                Register
+              </Link>
+            )}
+          </nav>
+        </div>
+      )}
     </header>
   )
 }
