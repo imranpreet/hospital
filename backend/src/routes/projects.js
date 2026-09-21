@@ -328,12 +328,12 @@ router.post('/:id/members', auth, async (req, res) => {
       return res.status(400).json({ msg: 'Creator is already part of the project' });
     }
 
-    if (project.members.some((m) => m.toString() === member._id.toString())) {
-      return res.status(400).json({ msg: 'User is already a member' });
-    }
+    const alreadyMember = project.members.some((m) => m.toString() === member._id.toString());
 
-    project.members.push(member._id);
-    await project.save();
+    if (!alreadyMember) {
+      project.members.push(member._id);
+      await project.save();
+    }
     await project.populate('members', 'name email');
 
     const creator = await User.findById(req.user.id, 'name email');
@@ -341,7 +341,8 @@ router.post('/:id/members', auth, async (req, res) => {
 
     res.json({
       ...project.toObject(),
-      invitation
+      invitation,
+      memberAlreadyPresent: alreadyMember
     });
   } catch (err) {
     console.error('Add member error:', err);

@@ -204,14 +204,14 @@ export default function StaffCollaboration() {
 
   const isProjectCreator = selectedProject?.creator?._id === currentUserId || selectedProject?.creator === currentUserId
 
-  async function fetchProjects() {
+  async function fetchProjects(preferredProjectId = '') {
     try {
       const res = await API.get('/projects')
       const list = res.data || []
       setProjects(list)
-      if (!selectedProject && list.length) {
-        const requestedProjectId = searchParams.get('project')
-        const requestedProject = list.find(project => project._id === requestedProjectId)
+      const currentProjectId = preferredProjectId || selectedProject?._id || searchParams.get('project')
+      if (list.length && (!selectedProject || preferredProjectId)) {
+        const requestedProject = list.find(project => project._id === currentProjectId)
         const projectToSelect = requestedProject || list[0]
         setSelectedProject(projectToSelect)
         fetchNotes(projectToSelect._id)
@@ -300,8 +300,8 @@ export default function StaffCollaboration() {
       const res = await API.post(`/projects/${selectedProject._id}/members`, { email: memberEmail })
       setSelectedProject(res.data)
       setMemberEmail('')
-      fetchProjects()
-      alert(res.data.invitation?.message || 'Member added successfully.')
+      fetchProjects(selectedProject._id)
+      alert(res.data.invitation?.message || (res.data.memberAlreadyPresent ? 'Member already present. Invitation resent.' : 'Member added successfully.'))
     } catch (err) {
       console.error(err)
       alert(err.response?.data?.msg || 'Failed to add member')
